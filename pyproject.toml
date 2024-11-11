@@ -12,4 +12,6 @@ dependencies = [
     "flask-login>=0.6.3",
     "pypdf2>=3.0.1",
     "werkzeug",
+    "textblob>=0.18.0.post0",
+    "nltk>=3.9.1",
 ]

@@ -69,10 +69,14 @@ def upload_book():
     db.session.commit()
     
     characters = extract_characters(content)
-    for char_name, char_desc in characters.items():
+    for char_name, char_data in characters.items():
         character = Character(
             name=char_name,
-            description=char_desc,
+            description=char_data["description"],
+            personality_traits=char_data["personality_traits"],
+            emotional_profile=char_data["emotional_profile"],
+            relationships=char_data["relationships"],
+            personality_summary=char_data["personality_summary"],
             book_id=book.id
         )
         db.session.add(character)

@@ -1,5 +1,6 @@
 import PyPDF2
 import re
+from .personality_analyzer import analyze_personality
 
 def process_pdf_content(file):
     """Process PDF file and extract text content"""
@@ -10,16 +11,26 @@ def process_pdf_content(file):
     return content
 
 def extract_characters(content):
-    """Simple character extraction logic (placeholder)"""
-    # This is a simplified version - in production you'd want more sophisticated NLP
+    """Enhanced character extraction with personality analysis"""
     characters = {}
     name_pattern = r'([A-Z][a-z]+(?:\s[A-Z][a-z]+)*)'
     potential_names = re.findall(name_pattern, content)
     
-    # Filter and create basic character profiles
+    # Filter and create detailed character profiles
     for name in set(potential_names):
         if len(name.split()) >= 1:  # Only names with at least one word
-            context = content[max(0, content.find(name)-100):content.find(name)+100]
-            characters[name] = f"Character appearing in the context: {context}"
+            # Get surrounding context
+            context = content[max(0, content.find(name)-500):content.find(name)+500]
+            
+            # Perform personality analysis
+            personality_data = analyze_personality(content, name)
+            
+            characters[name] = {
+                "description": f"Character appearing in the context: {context}",
+                "personality_traits": personality_data["traits"],
+                "emotional_profile": personality_data["emotions"],
+                "relationships": personality_data["relationships"],
+                "personality_summary": personality_data["summary"]
+            }
     
     return characters
