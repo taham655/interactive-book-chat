@@ -484,6 +484,7 @@ dependencies = [
     { name = "openai" },
     { name = "psycopg2-binary" },
     { name = "pypdf2" },
+    { name = "werkzeug" },
 ]
 
 [package.metadata]
@@ -495,6 +496,7 @@ requires-dist = [
     { name = "openai", specifier = ">=1.54.3" },
     { name = "psycopg2-binary", specifier = ">=2.9.10" },
     { name = "pypdf2", specifier = ">=3.0.1" },
+    { name = "werkzeug" },
 ]
 
 [[package]]

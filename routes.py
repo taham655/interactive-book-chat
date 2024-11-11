@@ -3,6 +3,7 @@ from flask_login import login_user, logout_user, login_required, current_user
 from app import app, db
 from models import User, Book, Character, Conversation
 from utils import process_pdf_content, extract_characters
+from utils.ai_handler import generate_character_response
 from werkzeug.utils import secure_filename
 import os
 
@@ -85,6 +86,8 @@ def chat(character_id):
     character = Character.query.get_or_404(character_id)
     if request.method == 'POST':
         message = request.form['message']
+        
+        # Save user message
         conversation = Conversation(
             user_id=current_user.id,
             character_id=character_id,
@@ -93,8 +96,15 @@ def chat(character_id):
         db.session.add(conversation)
         db.session.commit()
         
-        # Generate character response (simplified for now)
-        response = f"As {character.name}, I acknowledge your message: {message}"
+        # Generate AI response using character context
+        response = generate_character_response(
+            character_name=character.name,
+            character_description=character.description,
+            book_content=character.book.content,
+            user_message=message
+        )
+        
+        # Save character response
         char_reply = Conversation(
             user_id=current_user.id,
             character_id=character_id,
