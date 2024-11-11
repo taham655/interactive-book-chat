@@ -9,6 +9,60 @@
         <p class="lead">Upload your favorite books and chat with the characters!</p>
         
         {% if current_user.is_authenticated %}
+            {% if recommended_books %}
+            <div class="card mt-4">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Recommended Books</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        {% for book in recommended_books %}
+                            <div class="col-md-6 mb-3">
+                                <div class="card h-100">
+                                    <div class="card-body">
+                                        <h6 class="card-title">{{ book.title }}</h6>
+                                        <p class="card-text">
+                                            <small class="text-muted">{{ book.characters.count() }} characters</small>
+                                        </p>
+                                        <div class="btn-group">
+                                            <div class="dropdown d-inline-block me-2">
+                                                <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                                                    Add to Library
+                                                </button>
+                                                <ul class="dropdown-menu">
+                                                    {% for library in current_user.libraries %}
+                                                        <li>
+                                                            <button class="dropdown-item add-to-library" 
+                                                                    data-library-id="{{ library.id }}"
+                                                                    data-book-id="{{ book.id }}">
+                                                                {{ library.name }}
+                                                            </button>
+                                                        </li>
+                                                    {% else %}
+                                                        <li><span class="dropdown-item disabled">No libraries</span></li>
+                                                    {% endfor %}
+                                                </ul>
+                                            </div>
+                                            {% set is_book_favorite = current_user.favorites.filter_by(book_id=book.id).first() is not none %}
+                                            <button class="btn {% if is_book_favorite %}btn-danger{% else %}btn-outline-danger{% endif %} toggle-favorite"
+                                                    data-type="book"
+                                                    data-id="{{ book.id }}">
+                                                {% if is_book_favorite %}
+                                                    Remove from Favorites
+                                                {% else %}
+                                                    Add to Favorites
+                                                {% endif %}
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
             <div class="card mt-4">
                 <div class="card-body">
                     <h5 class="card-title">Upload a Book</h5>

@@ -4,12 +4,16 @@ from app import app, db
 from models import User, Book, Character, Conversation, Library, Favorite
 from utils import process_pdf_content, extract_characters
 from utils.ai_handler import generate_character_response
+from utils.recommendations import get_recommendations
 from werkzeug.utils import secure_filename
 import os
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    recommended_books = []
+    if current_user.is_authenticated:
+        recommended_books = get_recommendations(current_user)
+    return render_template('index.html', recommended_books=recommended_books)
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
