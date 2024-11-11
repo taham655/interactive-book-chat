@@ -56,7 +56,7 @@
                                     </ul>
                                 </div>
                                 
-                                {% set is_book_favorite = current_user.favorites.filter_by(book_id=book.id).exists() %}
+                                {% set is_book_favorite = current_user.favorites.filter_by(book_id=book.id).first() is not none %}
                                 <button class="btn {% if is_book_favorite %}btn-danger{% else %}btn-outline-danger{% endif %} toggle-favorite"
                                         data-type="book"
                                         data-id="{{ book.id }}">
@@ -77,7 +77,7 @@
                                                class="btn btn-outline-secondary">
                                                 {{ character.name }}
                                             </a>
-                                            {% set is_character_favorite = current_user.favorites.filter_by(character_id=character.id).exists() %}
+                                            {% set is_character_favorite = current_user.favorites.filter_by(character_id=character.id).first() is not none %}
                                             <button class="btn {% if is_character_favorite %}btn-danger{% else %}btn-outline-danger{% endif %} toggle-favorite"
                                                     data-type="character"
                                                     data-id="{{ character.id }}"
