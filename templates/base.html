@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html data-bs-theme="light">
+<html data-bs-theme="light" data-custom-theme="default">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,7 +8,12 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <style>
         :root {
-            /* Enhanced Light Theme Colors */
+            /* Base Theme Variables */
+            --sidebar-width: 280px;
+            --transition-duration: 400ms;
+            --transition-timing: cubic-bezier(0.4, 0, 0.2, 1);
+            
+            /* Default Light Theme */
             --cream-bg: #F8F9FA;
             --primary-color: #2B6CB0;
             --secondary-color: #718096;
@@ -23,11 +28,57 @@
             --hover-bg: #EDF2F7;
             --shadow-sm: 0 1px 3px rgba(0,0,0,0.05);
             --shadow-md: 0 4px 6px rgba(0,0,0,0.05);
-            --sidebar-width: 280px;
-            --transition-duration: 400ms;
-            --transition-timing: cubic-bezier(0.4, 0, 0.2, 1);
         }
 
+        /* Nature Theme */
+        [data-custom-theme="nature"] {
+            --cream-bg: #F3F7F0;
+            --primary-color: #4B7F52;
+            --secondary-color: #7C9B7C;
+            --accent-color: #95B8A6;
+            --text-primary: #2C4A2D;
+            --text-secondary: #4A6B4A;
+            --sidebar-bg: #FFFFFF;
+            --card-bg: #FFFFFF;
+            --border-color: rgba(75, 127, 82, 0.1);
+            --chat-bubble-user: #E8F3E8;
+            --chat-bubble-other: #FFFFFF;
+            --hover-bg: #EAF2EA;
+        }
+
+        /* Ocean Theme */
+        [data-custom-theme="ocean"] {
+            --cream-bg: #F0F7F9;
+            --primary-color: #006D77;
+            --secondary-color: #83C5BE;
+            --accent-color: #4A9EA8;
+            --text-primary: #00474F;
+            --text-secondary: #407B84;
+            --sidebar-bg: #FFFFFF;
+            --card-bg: #FFFFFF;
+            --border-color: rgba(0, 109, 119, 0.1);
+            --chat-bubble-user: #E0F1F3;
+            --chat-bubble-other: #FFFFFF;
+            --hover-bg: #E6F3F5;
+        }
+
+        /* Sunset Theme */
+        [data-custom-theme="sunset"] {
+            --cream-bg: #FDF6F0;
+            --primary-color: #E07A5F;
+            --secondary-color: #F2CC8F;
+            --accent-color: #E76F51;
+            --text-primary: #723D46;
+            --text-secondary: #8B575E;
+            --sidebar-bg: #FFFFFF;
+            --card-bg: #FFFFFF;
+            --border-color: rgba(224, 122, 95, 0.1);
+            --chat-bubble-user: #FDE8E1;
+            --chat-bubble-other: #FFFFFF;
+            --hover-bg: #FEF0EA;
+        }
+
+        /* Dark Theme */
         [data-bs-theme="dark"] {
             --cream-bg: #1a1a1a;
             --primary-color: #4299E1;
@@ -45,6 +96,7 @@
             --shadow-md: 0 4px 6px rgba(0,0,0,0.2);
         }
 
+        /* Rest of the existing styles remain unchanged */
         body {
             background-color: var(--cream-bg);
             min-height: 100vh;
@@ -202,6 +254,23 @@
             transform: rotate(180deg);
         }
 
+        .theme-selector {
+            margin-top: 1rem;
+            padding: 0.5rem;
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-primary);
+            width: 100%;
+            cursor: pointer;
+        }
+
+        .theme-selector:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(var(--primary-color-rgb), 0.25);
+        }
+
         .page-transition {
             opacity: 1;
             transform: translateY(0);
@@ -242,6 +311,16 @@
                 <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
                     <i class="bi bi-sun-fill"></i>
                 </button>
+            </div>
+
+            <!-- Theme Selector -->
+            <div class="mb-4">
+                <select class="theme-selector" id="themeSelector">
+                    <option value="default">Default Theme</option>
+                    <option value="nature">Nature Theme</option>
+                    <option value="ocean">Ocean Theme</option>
+                    <option value="sunset">Sunset Theme</option>
+                </select>
             </div>
 
             <ul class="nav flex-column mb-auto">
@@ -320,13 +399,20 @@
         // Theme management
         const themeToggleBtn = document.getElementById('themeToggle');
         const themeIcon = themeToggleBtn.querySelector('i');
+        const themeSelector = document.getElementById('themeSelector');
         const html = document.documentElement;
 
-        // Load theme from localStorage
+        // Load theme preferences from localStorage
         const savedTheme = localStorage.getItem('theme') || 'light';
+        const savedCustomTheme = localStorage.getItem('customTheme') || 'default';
+        
+        // Apply saved themes
         html.setAttribute('data-bs-theme', savedTheme);
+        html.setAttribute('data-custom-theme', savedCustomTheme);
+        themeSelector.value = savedCustomTheme;
         updateThemeIcon(savedTheme);
 
+        // Theme toggle (light/dark)
         themeToggleBtn.addEventListener('click', () => {
             const currentTheme = html.getAttribute('data-bs-theme');
             const newTheme = currentTheme === 'light' ? 'dark' : 'light';
@@ -334,6 +420,13 @@
             html.setAttribute('data-bs-theme', newTheme);
             localStorage.setItem('theme', newTheme);
             updateThemeIcon(newTheme);
+        });
+
+        // Custom theme selection
+        themeSelector.addEventListener('change', (e) => {
+            const selectedTheme = e.target.value;
+            html.setAttribute('data-custom-theme', selectedTheme);
+            localStorage.setItem('customTheme', selectedTheme);
         });
 
         function updateThemeIcon(theme) {
