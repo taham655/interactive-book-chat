@@ -24,7 +24,8 @@
             --shadow-sm: 0 1px 3px rgba(0,0,0,0.05);
             --shadow-md: 0 4px 6px rgba(0,0,0,0.05);
             --sidebar-width: 280px;
-            --transition-duration: 300ms;
+            --transition-duration: 400ms;
+            --transition-timing: cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         [data-bs-theme="dark"] {
@@ -44,6 +45,13 @@
             --shadow-md: 0 4px 6px rgba(0,0,0,0.2);
         }
 
+        * {
+            transition: background-color var(--transition-duration) var(--transition-timing),
+                      color var(--transition-duration) var(--transition-timing),
+                      border-color var(--transition-duration) var(--transition-timing),
+                      box-shadow var(--transition-duration) var(--transition-timing);
+        }
+
         body {
             background-color: var(--cream-bg);
             min-height: 100vh;
@@ -51,7 +59,6 @@
             overflow-x: hidden;
             color: var(--text-primary);
             line-height: 1.6;
-            transition: background-color var(--transition-duration) ease;
         }
 
         #sidebar {
@@ -64,7 +71,6 @@
             border-right: 1px solid var(--border-color);
             padding: 1.5rem;
             z-index: 1030;
-            transition: transform 0.3s ease-in-out, background-color var(--transition-duration) ease;
             overflow-y: auto;
             box-shadow: var(--shadow-sm);
         }
@@ -75,12 +81,13 @@
             padding: 2rem;
             position: relative;
             background-color: var(--cream-bg);
-            transition: margin-left 0.3s ease-in-out, background-color var(--transition-duration) ease;
+            transition: margin-left 0.3s var(--transition-timing);
         }
 
         @media (max-width: 768px) {
             #sidebar {
                 transform: translateX(-100%);
+                transition: transform 0.3s var(--transition-timing);
             }
             #sidebar.show {
                 transform: translateX(0);
@@ -118,7 +125,9 @@
             background-color: var(--card-bg);
             border: none;
             box-shadow: var(--shadow-sm);
-            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out, background-color var(--transition-duration) ease;
+            transition: transform 0.2s var(--transition-timing),
+                      box-shadow 0.2s var(--transition-timing),
+                      background-color var(--transition-duration) var(--transition-timing);
         }
 
         .card:hover {
@@ -131,7 +140,7 @@
             padding: 0.8rem 1rem;
             border-radius: 8px;
             margin-bottom: 0.5rem;
-            transition: all 0.2s ease;
+            transition: all var(--transition-duration) var(--transition-timing);
             cursor: pointer;
             display: flex;
             align-items: center;
@@ -165,6 +174,12 @@
             align-items: center;
             justify-content: center;
             cursor: pointer;
+            transition: background-color var(--transition-duration) var(--transition-timing),
+                      transform 0.2s var(--transition-timing);
+        }
+
+        .toggle-sidebar-btn:hover {
+            transform: scale(1.05);
         }
 
         @media (max-width: 768px) {
@@ -187,7 +202,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: background-color 0.2s;
+            transition: all var(--transition-duration) var(--transition-timing);
             background: none;
             border: none;
             color: var(--text-primary);
@@ -195,13 +210,14 @@
 
         .theme-toggle:hover {
             background-color: var(--hover-bg);
+            transform: rotate(180deg);
         }
 
         .page-transition {
             opacity: 1;
             transform: translateY(0);
-            transition: opacity var(--transition-duration) ease-in-out,
-                        transform var(--transition-duration) ease-in-out;
+            transition: opacity var(--transition-duration) var(--transition-timing),
+                      transform var(--transition-duration) var(--transition-timing);
         }
 
         .page-exit {
@@ -210,7 +226,7 @@
         }
 
         .page-enter {
-            animation: pageEnter var(--transition-duration) ease-in-out forwards;
+            animation: pageEnter var(--transition-duration) var(--transition-timing) forwards;
         }
 
         @keyframes pageEnter {
