@@ -46,29 +46,42 @@ def register():
         password = request.form['password']
         
         if User.query.filter_by(username=username).first():
-            flash('Username already exists')
+            flash('Username already exists', 'error')
             return redirect(url_for('register'))
             
         user = User(username=username, email=email)
         user.set_password(password)
         db.session.add(user)
         db.session.commit()
+        flash('Registration successful! Please login.', 'success')
         return redirect(url_for('login'))
     return render_template('register.html')
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        user = User.query.filter_by(username=request.form['username']).first()
-        if user and user.check_password(request.form['password']):
+        username = request.form['username']
+        password = request.form['password']
+        
+        print(f"Login attempt for username: {username}")  # Debug print
+        
+        user = User.query.filter_by(username=username).first()
+        print(f"User query result: {user is not None}")  # Debug print
+        
+        if user and user.check_password(password):
+            print("Password verified successfully")  # Debug print
             login_user(user)
+            flash('Logged in successfully.', 'success')
             return redirect(url_for('index'))
-        flash('Invalid username or password')
+        
+        print("Login failed")  # Debug print
+        flash('Invalid username or password', 'error')
     return render_template('login.html')
 
 @app.route('/logout')
 def logout():
     logout_user()
+    flash('Logged out successfully.', 'success')
     return redirect(url_for('index'))
 
 @app.route('/upload', methods=['POST'])
