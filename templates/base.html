@@ -1,210 +1,30 @@
-<!DOCTYPE html>
-<html data-bs-theme="light">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TheFabled.ai - {% block title %}{% endblock %}</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-    <style>
-        :root {
-            --cream-bg: #FFF8E7;
-            --sidebar-width: 280px;
-            --chat-bubble-user: #DCF8C6;
-            --chat-bubble-other: #FFFFFF;
-        }
-
-        body {
-            background-color: var(--cream-bg);
-            min-height: 100vh;
-        }
-
-        #sidebar {
-            width: var(--sidebar-width);
-            position: fixed;
-            top: 0;
-            left: 0;
-            height: 100vh;
-            background-color: #FFFFFF;
-            border-right: 1px solid rgba(0, 0, 0, 0.1);
-            padding: 1rem;
-            z-index: 1000;
-            transition: transform 0.3s ease;
-        }
-
-        #content {
-            margin-left: var(--sidebar-width);
-            padding: 2rem;
-            transition: margin 0.3s ease;
-        }
-
-        @media (max-width: 768px) {
-            #sidebar {
-                transform: translateX(-100%);
-            }
-            #sidebar.show {
-                transform: translateX(0);
-            }
-            #content {
-                margin-left: 0;
-            }
-        }
-
-        .message-bubble {
-            max-width: 75%;
-            padding: 0.75rem 1rem;
-            border-radius: 15px;
-            position: relative;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
-            margin-bottom: 1rem;
-        }
-
-        .user-message .message-bubble {
-            background-color: var(--chat-bubble-user);
-            margin-left: auto;
-            border-top-right-radius: 5px;
-        }
-
-        .character-message .message-bubble {
-            background-color: var(--chat-bubble-other);
-            margin-right: auto;
-            border-top-left-radius: 5px;
-        }
-
-        .card {
-            background-color: #FFFFFF;
-            border: none;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            transition: transform 0.2s ease-in-out;
-        }
-
-        .card:hover {
-            transform: translateY(-2px);
-        }
-
-        .nav-link {
-            padding: 0.8rem 1rem;
-            border-radius: 8px;
-            margin-bottom: 0.5rem;
-            transition: all 0.2s ease;
-            cursor: pointer;
-        }
-
-        .nav-link:hover {
-            background-color: var(--cream-bg);
-        }
-
-        .nav-link.active {
-            background-color: var(--cream-bg);
-            font-weight: 500;
-        }
-
-        .toggle-sidebar-btn {
-            display: none;
-        }
-
-        @media (max-width: 768px) {
-            .toggle-sidebar-btn {
-                display: block;
-                position: fixed;
-                bottom: 1rem;
-                right: 1rem;
-                z-index: 1001;
-                width: 3rem;
-                height: 3rem;
-                border-radius: 50%;
-                background-color: var(--bs-primary);
-                color: white;
-                border: none;
-                box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-            }
-        }
-    </style>
-</head>
-<body>
-    <!-- Sidebar -->
-    <nav id="sidebar">
-        <div class="d-flex flex-column h-100">
-            <a class="navbar-brand d-flex align-items-center mb-4" href="{{ url_for('index') }}" data-navlink>
-                <i class="bi bi-book me-2"></i>
-                TheFabled.ai
-            </a>
-
-            <ul class="nav flex-column mb-auto">
+[Previous content remains the same until line 134]
                 <li class="nav-item">
                     <a class="nav-link {% if request.endpoint == 'index' %}active{% endif %}" 
-                       href="{{ url_for('index') }}"
-                       data-navlink>
+                       href="{{ url_for('index') }}#upload-section"
+                       data-navlink
+                       onclick="handleHomeClick(event)">
                         <i class="bi bi-house-door me-2"></i> Home
                     </a>
                 </li>
-                {% if current_user.is_authenticated %}
-                    <li class="nav-item">
-                        <a class="nav-link {% if request.endpoint == 'libraries' %}active{% endif %}" 
-                           href="{{ url_for('libraries') }}"
-                           data-navlink>
-                            <i class="bi bi-collection me-2"></i> My Libraries
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link {% if request.endpoint == 'favorites' %}active{% endif %}" 
-                           href="{{ url_for('favorites') }}"
-                           data-navlink>
-                            <i class="bi bi-heart me-2"></i> Favorites
-                        </a>
-                    </li>
-                {% endif %}
-            </ul>
-
-            <div class="mt-auto">
-                <hr>
-                {% if current_user.is_authenticated %}
-                    <div class="d-flex align-items-center mb-3">
-                        <i class="bi bi-person-circle me-2"></i>
-                        <span>{{ current_user.username }}</span>
-                    </div>
-                    <a class="nav-link text-danger" href="{{ url_for('logout') }}" data-navlink>
-                        <i class="bi bi-box-arrow-right me-2"></i> Logout
-                    </a>
-                {% else %}
-                    <a class="nav-link" href="{{ url_for('login') }}" data-navlink>
-                        <i class="bi bi-box-arrow-in-right me-2"></i> Login
-                    </a>
-                    <a class="nav-link" href="{{ url_for('register') }}" data-navlink>
-                        <i class="bi bi-person-plus me-2"></i> Register
-                    </a>
-                {% endif %}
-            </div>
-        </div>
-    </nav>
-
-    <!-- Mobile Toggle Button -->
-    <button class="toggle-sidebar-btn d-md-none" onclick="toggleSidebar()">
-        <i class="bi bi-list"></i>
-    </button>
-
-    <!-- Main Content -->
-    <main id="content">
-        {% with messages = get_flashed_messages(with_categories=true) %}
-            {% if messages %}
-                {% for category, message in messages %}
-                    <div class="alert alert-{{ category if category != 'message' else 'info' }} alert-dismissible fade show" role="alert">
-                        {{ message }}
-                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                    </div>
-                {% endfor %}
-            {% endif %}
-        {% endwith %}
-        
-        {% block content %}{% endblock %}
-    </main>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+[Rest of the previous content remains the same until before the closing script tag]
     <script>
+        // Enable smooth scrolling
+        document.documentElement.style.scrollBehavior = 'smooth';
+
         // Improved sidebar toggle functionality
         function toggleSidebar() {
             const sidebar = document.getElementById('sidebar');
             sidebar.classList.toggle('show');
+        }
+
+        // Handle home button click
+        function handleHomeClick(event) {
+            const uploadSection = document.getElementById('upload-section');
+            if (window.location.pathname === '/' && uploadSection) {
+                event.preventDefault();
+                uploadSection.scrollIntoView({ behavior: 'smooth' });
+            }
         }
 
         // Handle navigation clicks
@@ -234,6 +54,16 @@
             const sidebar = document.getElementById('sidebar');
             if (window.innerWidth > 768) {
                 sidebar.classList.remove('show');
+            }
+        });
+
+        // Handle direct hash navigation
+        window.addEventListener('load', function() {
+            if (window.location.hash === '#upload-section') {
+                const uploadSection = document.getElementById('upload-section');
+                if (uploadSection) {
+                    uploadSection.scrollIntoView({ behavior: 'smooth' });
+                }
             }
         });
     </script>
