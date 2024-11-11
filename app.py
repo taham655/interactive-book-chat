@@ -1,6 +1,14 @@
 import os
 from flask import Flask
-from extensions import db, login_manager
+from flask_sqlalchemy import SQLAlchemy
+from flask_login import LoginManager
+from sqlalchemy.orm import DeclarativeBase
+
+class Base(DeclarativeBase):
+    pass
+
+db = SQLAlchemy(model_class=Base)
+login_manager = LoginManager()
 
 app = Flask(__name__)
 app.secret_key = os.environ.get("FLASK_SECRET_KEY") or "thefabled-secret-key"
@@ -11,19 +19,11 @@ app.config["SQLALCHEMY_ENGINE_OPTIONS"] = {
 }
 app.config["MAX_CONTENT_LENGTH"] = 16 * 1024 * 1024  # 16MB max file size
 
-# Initialize extensions
 db.init_app(app)
 login_manager.init_app(app)
 login_manager.login_view = "login"
 
-# Initialize upload folder
-app.config['UPLOAD_FOLDER'] = os.path.join(app.static_folder, 'uploads')
-os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
-
-# Import routes after app creation to avoid circular imports
 with app.app_context():
-    from routes import *  # Import all routes
+    import models
+    import routes
     db.create_all()
-
-if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000)

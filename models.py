@@ -1,5 +1,5 @@
 from datetime import datetime
-from extensions import db, login_manager
+from app import db, login_manager
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 
@@ -29,7 +29,7 @@ class Library(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     books = db.relationship('Book', secondary='library_books', lazy='dynamic',
-                         backref=db.backref('libraries', lazy='dynamic'))
+                          backref=db.backref('libraries', lazy='dynamic'))
 
 class Book(db.Model):
     id = db.Column(db.Integer, primary_key=True)
