@@ -56,10 +56,11 @@
                                     </ul>
                                 </div>
                                 
-                                <button class="btn {% if book in current_user.favorites.filter_by(book_id=book.id).first() %}btn-danger{% else %}btn-outline-danger{% endif %} toggle-favorite"
+                                {% set is_book_favorite = current_user.favorites.filter_by(book_id=book.id).exists() %}
+                                <button class="btn {% if is_book_favorite %}btn-danger{% else %}btn-outline-danger{% endif %} toggle-favorite"
                                         data-type="book"
                                         data-id="{{ book.id }}">
-                                    {% if book in current_user.favorites.filter_by(book_id=book.id).first() %}
+                                    {% if is_book_favorite %}
                                         Remove from Favorites
                                     {% else %}
                                         Add to Favorites
@@ -76,11 +77,12 @@
                                                class="btn btn-outline-secondary">
                                                 {{ character.name }}
                                             </a>
-                                            <button class="btn {% if character in current_user.favorites.filter_by(character_id=character.id).first() %}btn-danger{% else %}btn-outline-danger{% endif %} toggle-favorite"
+                                            {% set is_character_favorite = current_user.favorites.filter_by(character_id=character.id).exists() %}
+                                            <button class="btn {% if is_character_favorite %}btn-danger{% else %}btn-outline-danger{% endif %} toggle-favorite"
                                                     data-type="character"
                                                     data-id="{{ character.id }}"
-                                                    title="{% if character in current_user.favorites.filter_by(character_id=character.id).first() %}Remove from{% else %}Add to{% endif %} Favorites">
-                                                <i class="bi bi-heart{% if not character in current_user.favorites.filter_by(character_id=character.id).first() %}-fill{% endif %}"></i>
+                                                    title="{% if is_character_favorite %}Remove from{% else %}Add to{% endif %} Favorites">
+                                                <i class="bi bi-heart{% if not is_character_favorite %}-fill{% endif %}"></i>
                                             </button>
                                         </div>
                                     </div>
