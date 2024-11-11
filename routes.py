@@ -5,8 +5,21 @@ from models import User, Book, Character, Conversation, Library, Favorite
 from utils import process_pdf_content, extract_characters
 from utils.ai_handler import generate_character_response
 from utils.recommendations import get_recommendations
+from utils.image_helpers import generate_responsive_images, get_image_dimensions
 from werkzeug.utils import secure_filename
 import os
+
+# Add new constant for image upload directory
+UPLOAD_FOLDER = os.path.join('static', 'uploads')
+ALLOWED_IMAGE_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
+
+# Ensure upload directory exists
+os.makedirs(os.path.join(UPLOAD_FOLDER, 'books'), exist_ok=True)
+os.makedirs(os.path.join(UPLOAD_FOLDER, 'characters'), exist_ok=True)
+
+def allowed_image_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_IMAGE_EXTENSIONS
 
 @app.route('/')
 def index():
@@ -55,6 +68,8 @@ def upload_book():
         return jsonify({'error': 'No file uploaded'}), 400
         
     file = request.files['file']
+    cover_image = request.files.get('cover_image')
+    
     if file.filename == '':
         return jsonify({'error': 'No file selected'}), 400
         
@@ -64,10 +79,23 @@ def upload_book():
     filename = secure_filename(file.filename)
     content = process_pdf_content(file)
     
+    # Handle cover image if provided
+    cover_path = None
+    if cover_image and allowed_image_file(cover_image.filename):
+        image_filename = secure_filename(cover_image.filename)
+        base_path = os.path.join('uploads', 'books', os.path.splitext(image_filename)[0])
+        cover_image_path = os.path.join(UPLOAD_FOLDER, 'books', image_filename)
+        cover_image.save(cover_image_path)
+        
+        # Generate responsive images
+        generate_responsive_images(cover_image_path, os.path.join(UPLOAD_FOLDER, 'books'))
+        cover_path = base_path
+    
     book = Book(
         title=filename.replace('.pdf', ''),
         content=content,
-        user_id=current_user.id
+        user_id=current_user.id,
+        cover_path=cover_path
     )
     db.session.add(book)
     db.session.commit()

@@ -20,6 +20,20 @@
                     <div class="col-md-6 mb-3">
                         <div class="card">
                             <div class="card-body">
+                                {% if book.cover_path %}
+                                <div class="book-cover mb-3">
+                                    <img src="{{ url_for('static', filename=book.cover_path + '-200w.jpg') }}"
+                                         srcset="{{ url_for('static', filename=book.cover_path + '-200w.jpg') }} 200w,
+                                                 {{ url_for('static', filename=book.cover_path + '-400w.jpg') }} 400w,
+                                                 {{ url_for('static', filename=book.cover_path + '-800w.jpg') }} 800w"
+                                         sizes="(max-width: 768px) 200px,
+                                                (max-width: 1200px) 400px,
+                                                800px"
+                                         alt="{{ book.title }} cover"
+                                         class="img-fluid rounded"
+                                         loading="lazy">
+                                </div>
+                                {% endif %}
                                 <h6 class="card-title">{{ book.title }}</h6>
                                 <p class="card-text">
                                     <small class="text-muted">Added: {{ book.upload_date.strftime('%Y-%m-%d') }}</small>

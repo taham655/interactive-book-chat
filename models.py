@@ -37,6 +37,7 @@ class Book(db.Model):
     author = db.Column(db.String(200))
     upload_date = db.Column(db.DateTime, default=datetime.utcnow)
     content = db.Column(db.Text)
+    cover_path = db.Column(db.String(255))  # Path to the book cover image
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     characters = db.relationship('Character', backref='book', lazy='dynamic')
     favorites = db.relationship('Favorite', backref='book', lazy='dynamic')
@@ -49,6 +50,7 @@ class Character(db.Model):
     emotional_profile = db.Column(db.JSON)
     relationships = db.Column(db.JSON)
     personality_summary = db.Column(db.Text)
+    avatar_path = db.Column(db.String(255))  # Path to the character avatar image
     book_id = db.Column(db.Integer, db.ForeignKey('book.id'))
     conversations = db.relationship('Conversation', backref='character', lazy='dynamic')
     favorites = db.relationship('Favorite', backref='character', lazy='dynamic')

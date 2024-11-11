@@ -14,12 +14,33 @@
                             <i class="bi bi-list"></i>
                         </button>
                     </div>
-                    <div>
-                        <h3 class="h5 mb-1">{{ character.name }}</h3>
-                        <p class="text-muted small mb-0">
-                            <i class="bi bi-book me-1"></i>
-                            From: {{ character.book.title }}
-                        </p>
+                    <div class="d-flex align-items-center">
+                        <div class="character-avatar me-3">
+                            {% if character.avatar_path %}
+                            <img src="{{ url_for('static', filename=character.avatar_path + '-200w.jpg') }}"
+                                 srcset="{{ url_for('static', filename=character.avatar_path + '-200w.jpg') }} 200w,
+                                         {{ url_for('static', filename=character.avatar_path + '-400w.jpg') }} 400w"
+                                 sizes="(max-width: 768px) 200px,
+                                        400px"
+                                 alt="{{ character.name }}"
+                                 class="rounded-circle"
+                                 width="50"
+                                 height="50"
+                                 loading="lazy">
+                            {% else %}
+                            <div class="default-avatar rounded-circle bg-secondary text-white d-flex align-items-center justify-content-center"
+                                 style="width: 50px; height: 50px;">
+                                {{ character.name[:1].upper() }}
+                            </div>
+                            {% endif %}
+                        </div>
+                        <div>
+                            <h3 class="h5 mb-1">{{ character.name }}</h3>
+                            <p class="text-muted small mb-0">
+                                <i class="bi bi-book me-1"></i>
+                                From: {{ character.book.title }}
+                            </p>
+                        </div>
                     </div>
                 </div>
                 {% set is_character_favorite = current_user.favorites.filter_by(character_id=character.id).first() is not none %}
