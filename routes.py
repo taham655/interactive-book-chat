@@ -1,13 +1,23 @@
-from flask import render_template, redirect, url_for, flash, request, jsonify
+from flask import render_template, redirect, url_for, flash, request, jsonify, session
 from flask_login import login_user, logout_user, login_required, current_user
 from app import app, db
 from models import User, Book, Character, Conversation, Library, Favorite
-from utils import process_pdf_content, extract_characters
-from utils.ai_handler import generate_character_response
+from utils import (
+    process_pdf_content,
+    extract_text_from_epub,
+    extract_characters,
+    generate_character_response,
+    analyze_book,
+    create_character_prompt,
+    initialize_chat_model,
+    initialize_chat,
+    get_chatbot_response
+)
 from utils.recommendations import get_recommendations
 from utils.image_helpers import generate_responsive_images, get_image_dimensions
 from werkzeug.utils import secure_filename
 import os
+import json
 
 # Add new constant for image upload directory
 UPLOAD_FOLDER = os.path.join('static', 'uploads')
@@ -224,25 +234,62 @@ def favorites():
 @login_required
 def chat(character_id):
     character = Character.query.get_or_404(character_id)
+    
     if request.method == 'POST':
         message = request.form['message']
         
+        # Get existing conversation history
+        conversations = Conversation.query.filter_by(
+            character_id=character_id,
+            user_id=current_user.id
+        ).order_by(Conversation.timestamp).all()
+        
+        # Format conversation history for the AI
+        messages = [
+            {
+                "role": "assistant" if not conv.is_user else "user",
+                "content": conv.message
+            }
+            for conv in conversations
+        ]
+        
+        # Create character prompt
+        character_details = {
+            'basic_info': {
+                'name': character.name,
+                'role': character.role,
+                'plot_importance': character.personality_summary,
+                'key_relationships': character.relationships
+            },
+            'description': {
+                'detailed_description': character.description,
+                'llm_persona_prompt': character.llm_persona_prompt
+            },
+            'depth': {
+                'character_arc': character.emotional_profile.get('character_arc', ''),
+                'personality_traits': character.personality_traits,
+                'memorable_quotes': character.emotional_profile.get('memorable_quotes', [])
+            }
+        }
+        
+        character_prompt = create_character_prompt(character_details)
+        
+        # Generate AI response using new system
+        response = generate_character_response(
+            character_prompt=character_prompt,
+            messages=messages,
+            user_message=message,
+            model=initialize_chat_model()  # Initialize model for this conversation
+        )
+        
         # Save user message
-        conversation = Conversation(
+        user_message = Conversation(
             user_id=current_user.id,
             character_id=character_id,
-            message=message
+            message=message,
+            is_user=True
         )
-        db.session.add(conversation)
-        db.session.commit()
-        
-        # Generate AI response using character context
-        response = generate_character_response(
-            character_name=character.name,
-            character_description=character.description,
-            book_content=character.book.content,
-            user_message=message
-        )
+        db.session.add(user_message)
         
         # Save character response
         char_reply = Conversation(
@@ -259,6 +306,7 @@ def chat(character_id):
             'character_name': character.name
         })
     
+    # GET request - show chat interface
     conversations = Conversation.query.filter_by(
         character_id=character_id,
         user_id=current_user.id
@@ -267,3 +315,64 @@ def chat(character_id):
     return render_template('chat.html', 
                          character=character,
                          conversations=conversations)
+
+@app.route('/chat/initialize', methods=['POST'])
+@login_required
+def initialize_character_chat():
+    """Initialize or reset chat with a new character"""
+    selected_character = request.json.get('character')
+    if not selected_character:
+        return jsonify({'error': 'No character selected'}), 400
+    
+    try:
+        # Load character analysis data
+        with open('character_analysis.json', 'r', encoding='utf-8') as f:
+            character_data = json.load(f)
+        
+        # Initialize chat with selected character
+        character_prompt, character_name = initialize_chat(selected_character, character_data)
+        
+        # Store in session
+        session['character_prompt'] = character_prompt
+        session['current_character'] = character_name
+        session['messages'] = []
+        
+        return jsonify({
+            'success': True,
+            'character_name': character_name
+        })
+        
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/chat/message', methods=['POST'])
+@login_required
+def chat_message():
+    """Handle individual chat messages"""
+    if 'current_character' not in session:
+        return jsonify({'error': 'No active character chat'}), 400
+    
+    message = request.json.get('message')
+    if not message:
+        return jsonify({'error': 'No message provided'}), 400
+    
+    try:
+        # Get response using the character's prompt
+        model = initialize_chat_model()
+        response = get_chatbot_response(
+            prompt=session['character_prompt'],
+            messages=session['messages'],
+            model=model
+        )
+        
+        if response:
+            # Update session messages
+            session['messages'].append({"role": "user", "content": message})
+            session['messages'].append({"role": "assistant", "content": response})
+            
+            return jsonify({'response': response})
+        else:
+            return jsonify({'error': 'Failed to get response'}), 500
+            
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
