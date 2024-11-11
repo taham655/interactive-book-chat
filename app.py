@@ -18,6 +18,8 @@ app.config["SQLALCHEMY_ENGINE_OPTIONS"] = {
     "pool_pre_ping": True,
 }
 app.config["MAX_CONTENT_LENGTH"] = 16 * 1024 * 1024  # 16MB max file size
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'your-secret-key-here')  # Required for sessions
+app.config['SESSION_TYPE'] = 'filesystem'  # Store sessions in filesystem
 
 db.init_app(app)
 login_manager.init_app(app)
