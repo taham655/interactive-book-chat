@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block title %}My Libraries{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8 offset-md-2">
+        <h2>My Libraries</h2>
+        
+        <!-- Create Library Form -->
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5 class="card-title">Create New Library</h5>
+                <form method="POST">
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Library Name</label>
+                        <input type="text" class="form-control" id="name" name="name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="description" class="form-label">Description</label>
+                        <textarea class="form-control" id="description" name="description" rows="3"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Create Library</button>
+                </form>
+            </div>
+        </div>
+        
+        <!-- Libraries List -->
+        <div class="row">
+            {% for library in libraries %}
+            <div class="col-md-6 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ library.name }}</h5>
+                        <p class="card-text">{{ library.description }}</p>
+                        <p class="text-muted">Books: {{ library.books.count() }}</p>
+                        <a href="{{ url_for('library_detail', library_id=library.id) }}" 
+                           class="btn btn-outline-primary">View Library</a>
+                    </div>
+                </div>
+            </div>
+            {% else %}
+            <div class="col-12">
+                <p class="text-muted">You haven't created any libraries yet.</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+
+{% block title %}{{ library.name }}{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8 offset-md-2">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2>{{ library.name }}</h2>
+            <a href="{{ url_for('libraries') }}" class="btn btn-outline-secondary">Back to Libraries</a>
+        </div>
+        
+        <p class="lead">{{ library.description }}</p>
+        
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5 class="card-title">Books in Library</h5>
+                <div class="row">
+                    {% for book in library.books %}
+                    <div class="col-md-6 mb-3">
+                        <div class="card">
+                            <div class="card-body">
+                                <h6 class="card-title">{{ book.title }}</h6>
+                                <p class="card-text">
+                                    <small class="text-muted">Added: {{ book.upload_date.strftime('%Y-%m-%d') }}</small>
+                                </p>
+                                <button class="btn btn-outline-danger btn-sm remove-book" 
+                                        data-library-id="{{ library.id }}" 
+                                        data-book-id="{{ book.id }}">
+                                    Remove from Library
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    {% else %}
+                    <div class="col-12">
+                        <p class="text-muted">No books in this library yet.</p>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.remove-book').forEach(button => {
+        button.addEventListener('click', async function() {
+            const libraryId = this.dataset.libraryId;
+            const bookId = this.dataset.bookId;
+            
+            try {
+                const response = await fetch(`/library/${libraryId}/remove_book/${bookId}`, {
+                    method: 'POST'
+                });
+                
+                if (response.ok) {
+                    window.location.reload();
+                } else {
+                    const data = await response.json();
+                    alert(data.error || 'Failed to remove book');
+                }
+            } catch (error) {
+                alert('Failed to remove book: ' + error.message);
+            }
+        });
+    });
+});
+</script>
+{% endblock %}

@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+
+{% block title %}My Favorites{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8 offset-md-2">
+        <h2>My Favorites</h2>
+        
+        <!-- Favorite Books -->
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5 class="card-title">Favorite Books</h5>
+                <div class="row">
+                    {% for book in favorite_books %}
+                    <div class="col-md-6 mb-3">
+                        <div class="card">
+                            <div class="card-body">
+                                <h6 class="card-title">{{ book.title }}</h6>
+                                <p class="card-text">
+                                    <small class="text-muted">Added: {{ book.upload_date.strftime('%Y-%m-%d') }}</small>
+                                </p>
+                                <button class="btn btn-outline-danger btn-sm toggle-favorite" 
+                                        data-type="book" 
+                                        data-id="{{ book.id }}">
+                                    Remove from Favorites
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    {% else %}
+                    <div class="col-12">
+                        <p class="text-muted">No favorite books yet.</p>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        
+        <!-- Favorite Characters -->
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Favorite Characters</h5>
+                <div class="row">
+                    {% for character in favorite_characters %}
+                    <div class="col-md-6 mb-3">
+                        <div class="card">
+                            <div class="card-body">
+                                <h6 class="card-title">{{ character.name }}</h6>
+                                <p class="card-text">
+                                    <small class="text-muted">From: {{ character.book.title }}</small>
+                                </p>
+                                <div class="d-flex gap-2">
+                                    <a href="{{ url_for('chat', character_id=character.id) }}" 
+                                       class="btn btn-outline-primary btn-sm">Chat</a>
+                                    <button class="btn btn-outline-danger btn-sm toggle-favorite" 
+                                            data-type="character" 
+                                            data-id="{{ character.id }}">
+                                        Remove from Favorites
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% else %}
+                    <div class="col-12">
+                        <p class="text-muted">No favorite characters yet.</p>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.toggle-favorite').forEach(button => {
+        button.addEventListener('click', async function() {
+            const type = this.dataset.type;
+            const id = this.dataset.id;
+            
+            try {
+                const response = await fetch('/favorites/toggle', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: `${type}_id=${id}`
+                });
+                
+                if (response.ok) {
+                    window.location.reload();
+                } else {
+                    const data = await response.json();
+                    alert(data.error || 'Failed to update favorite');
+                }
+            } catch (error) {
+                alert('Failed to update favorite: ' + error.message);
+            }
+        });
+    });
+});
+</script>
+{% endblock %}

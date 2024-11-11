@@ -28,13 +28,62 @@
                         <div class="card-body">
                             <h5 class="card-title">{{ book.title }}</h5>
                             <p class="card-text">Uploaded: {{ book.upload_date.strftime('%Y-%m-%d') }}</p>
+                            
+                            <!-- Library and Favorite Actions -->
+                            <div class="mb-3">
+                                <div class="dropdown d-inline-block me-2">
+                                    <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                                        Add to Library
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        {% for library in current_user.libraries %}
+                                            <li>
+                                                <button class="dropdown-item add-to-library" 
+                                                        data-library-id="{{ library.id }}"
+                                                        data-book-id="{{ book.id }}">
+                                                    {{ library.name }}
+                                                </button>
+                                            </li>
+                                        {% else %}
+                                            <li><span class="dropdown-item disabled">No libraries</span></li>
+                                        {% endfor %}
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li>
+                                            <a class="dropdown-item" href="{{ url_for('libraries') }}">
+                                                Manage Libraries
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                
+                                <button class="btn {% if book in current_user.favorites.filter_by(book_id=book.id).first() %}btn-danger{% else %}btn-outline-danger{% endif %} toggle-favorite"
+                                        data-type="book"
+                                        data-id="{{ book.id }}">
+                                    {% if book in current_user.favorites.filter_by(book_id=book.id).first() %}
+                                        Remove from Favorites
+                                    {% else %}
+                                        Add to Favorites
+                                    {% endif %}
+                                </button>
+                            </div>
+                            
                             <div class="character-list">
                                 <h6>Characters:</h6>
                                 {% for character in book.characters %}
-                                    <a href="{{ url_for('chat', character_id=character.id) }}" 
-                                       class="btn btn-outline-secondary btn-sm me-2 mb-2">
-                                        {{ character.name }}
-                                    </a>
+                                    <div class="d-inline-block me-2 mb-2">
+                                        <div class="btn-group">
+                                            <a href="{{ url_for('chat', character_id=character.id) }}" 
+                                               class="btn btn-outline-secondary">
+                                                {{ character.name }}
+                                            </a>
+                                            <button class="btn {% if character in current_user.favorites.filter_by(character_id=character.id).first() %}btn-danger{% else %}btn-outline-danger{% endif %} toggle-favorite"
+                                                    data-type="character"
+                                                    data-id="{{ character.id }}"
+                                                    title="{% if character in current_user.favorites.filter_by(character_id=character.id).first() %}Remove from{% else %}Add to{% endif %} Favorites">
+                                                <i class="bi bi-heart{% if not character in current_user.favorites.filter_by(character_id=character.id).first() %}-fill{% endif %}"></i>
+                                            </button>
+                                        </div>
+                                    </div>
                                 {% endfor %}
                             </div>
                         </div>
@@ -51,5 +100,6 @@
 
 {% if current_user.is_authenticated %}
     <script src="{{ url_for('static', filename='js/upload.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/libraries.js') }}"></script>
 {% endif %}
 {% endblock %}
