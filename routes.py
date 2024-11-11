@@ -5,42 +5,59 @@ from models import User, Book, Character, Conversation, Library, Favorite
 from utils import process_pdf_content, extract_characters
 from utils.ai_handler import generate_character_response
 from utils.recommendations import get_recommendations
+from utils.image_optimizer import optimize_image, get_image_dimensions
+from utils.template_helpers import responsive_image
 from werkzeug.utils import secure_filename
 import os
 
+# Add to your existing imports and configurations
+ALLOWED_IMAGE_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
+
+def allowed_image_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_IMAGE_EXTENSIONS
+
 @app.route('/')
 def index():
-    recommended_books = []
     if current_user.is_authenticated:
         recommended_books = get_recommendations(current_user)
-    return render_template('index.html', recommended_books=recommended_books)
+        return render_template('index.html', recommended_books=recommended_books)
+    return render_template('index.html', recommended_books=[])
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
+    if current_user.is_authenticated:
+        return redirect(url_for('index'))
     if request.method == 'POST':
-        username = request.form['username']
-        email = request.form['email']
-        password = request.form['password']
-        
-        if User.query.filter_by(username=username).first():
-            flash('Username already exists')
+        user = User.query.filter_by(username=request.form['username']).first()
+        if user:
+            flash('Username already exists', 'danger')
             return redirect(url_for('register'))
-            
-        user = User(username=username, email=email)
-        user.set_password(password)
+        user = User.query.filter_by(email=request.form['email']).first()
+        if user:
+            flash('Email already registered', 'danger')
+            return redirect(url_for('register'))
+        
+        user = User(username=request.form['username'], email=request.form['email'])
+        user.set_password(request.form['password'])
         db.session.add(user)
         db.session.commit()
+        flash('Registration successful!', 'success')
         return redirect(url_for('login'))
     return render_template('register.html')
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    if current_user.is_authenticated:
+        return redirect(url_for('index'))
     if request.method == 'POST':
         user = User.query.filter_by(username=request.form['username']).first()
-        if user and user.check_password(request.form['password']):
-            login_user(user)
-            return redirect(url_for('index'))
-        flash('Invalid username or password')
+        if user is None or not user.check_password(request.form['password']):
+            flash('Invalid username or password', 'danger')
+            return redirect(url_for('login'))
+        login_user(user)
+        next_page = request.args.get('next')
+        return redirect(next_page if next_page else url_for('index'))
     return render_template('login.html')
 
 @app.route('/logout')
@@ -48,194 +65,59 @@ def logout():
     logout_user()
     return redirect(url_for('index'))
 
-@app.route('/upload', methods=['POST'])
+@app.route('/test_image_upload')
 @login_required
-def upload_book():
-    if 'file' not in request.files:
-        return jsonify({'error': 'No file uploaded'}), 400
+def test_image_upload():
+    return render_template('image_test.html')
+
+@app.route('/upload_image', methods=['POST'])
+@login_required
+def upload_image():
+    if 'image' not in request.files:
+        return jsonify({'error': 'No image uploaded'}), 400
         
-    file = request.files['file']
-    if file.filename == '':
+    file = request.files['image']
+    if not file or file.filename == '':
         return jsonify({'error': 'No file selected'}), 400
         
-    if not file.filename.endswith('.pdf'):
-        return jsonify({'error': 'Only PDF files are supported'}), 400
+    if not allowed_image_file(file.filename):
+        return jsonify({'error': 'Invalid file type'}), 400
 
-    filename = secure_filename(file.filename)
-    content = process_pdf_content(file)
-    
-    book = Book(
-        title=filename.replace('.pdf', ''),
-        content=content,
-        user_id=current_user.id
-    )
-    db.session.add(book)
-    db.session.commit()
-    
-    characters = extract_characters(content)
-    for char_name, char_data in characters.items():
-        character = Character(
-            name=char_name,
-            description=char_data["description"],
-            personality_traits=char_data["personality_traits"],
-            emotional_profile=char_data["emotional_profile"],
-            relationships=char_data["relationships"],
-            personality_summary=char_data["personality_summary"],
-            book_id=book.id
-        )
-        db.session.add(character)
-    db.session.commit()
-    
-    return jsonify({'success': True, 'book_id': book.id})
+    try:
+        filename = secure_filename(file.filename)
+        if not filename:
+            return jsonify({'error': 'Invalid filename'}), 400
 
-@app.route('/libraries', methods=['GET', 'POST'])
-@login_required
-def libraries():
-    if request.method == 'POST':
-        name = request.form.get('name')
-        description = request.form.get('description')
+        upload_folder = os.path.join(app.static_folder, 'uploads')
+        os.makedirs(upload_folder, exist_ok=True)
         
-        if not name:
-            flash('Library name is required')
-            return redirect(url_for('libraries'))
+        file_path = os.path.join(upload_folder, filename)
+        file.save(file_path)
+        
+        # Generate optimized versions
+        name, ext = os.path.splitext(filename)
+        output_base = os.path.join(upload_folder, name)
+        
+        optimized_images = optimize_image(file_path, output_base)
+        # Remove original upload after optimization
+        if os.path.exists(file_path):
+            os.remove(file_path)
+        
+        # Convert paths to URLs
+        for img in optimized_images:
+            img['path'] = img['path'].replace(app.static_folder, '/static')
             
-        library = Library(name=name, description=description, user_id=current_user.id)
-        db.session.add(library)
-        db.session.commit()
-        flash('Library created successfully')
-        
-    libraries = current_user.libraries.all()
-    return render_template('libraries.html', libraries=libraries)
-
-@app.route('/library/<int:library_id>')
-@login_required
-def library_detail(library_id):
-    library = Library.query.get_or_404(library_id)
-    if library.user_id != current_user.id:
-        flash('Access denied')
-        return redirect(url_for('libraries'))
-    return render_template('library_detail.html', library=library)
-
-@app.route('/library/<int:library_id>/add_book/<int:book_id>', methods=['POST'])
-@login_required
-def add_book_to_library(library_id, book_id):
-    library = Library.query.get_or_404(library_id)
-    book = Book.query.get_or_404(book_id)
-    
-    if library.user_id != current_user.id:
-        return jsonify({'error': 'Access denied'}), 403
-        
-    if book not in library.books:
-        library.books.append(book)
-        db.session.commit()
-        return jsonify({'success': True})
-    return jsonify({'error': 'Book already in library'}), 400
-
-@app.route('/library/<int:library_id>/remove_book/<int:book_id>', methods=['POST'])
-@login_required
-def remove_book_from_library(library_id, book_id):
-    library = Library.query.get_or_404(library_id)
-    book = Book.query.get_or_404(book_id)
-    
-    if library.user_id != current_user.id:
-        return jsonify({'error': 'Access denied'}), 403
-        
-    if book in library.books:
-        library.books.remove(book)
-        db.session.commit()
-        return jsonify({'success': True})
-    return jsonify({'error': 'Book not in library'}), 400
-
-@app.route('/favorites/toggle', methods=['POST'])
-@login_required
-def toggle_favorite():
-    book_id = request.form.get('book_id')
-    character_id = request.form.get('character_id')
-    
-    if not book_id and not character_id:
-        return jsonify({'error': 'Either book_id or character_id is required'}), 400
-        
-    existing_favorite = Favorite.query.filter_by(
-        user_id=current_user.id,
-        book_id=book_id,
-        character_id=character_id
-    ).first()
-    
-    if existing_favorite:
-        db.session.delete(existing_favorite)
-        db.session.commit()
-        return jsonify({'success': True, 'action': 'removed'})
-    
-    favorite = Favorite(
-        user_id=current_user.id,
-        book_id=book_id,
-        character_id=character_id
-    )
-    db.session.add(favorite)
-    db.session.commit()
-    return jsonify({'success': True, 'action': 'added'})
-
-@app.route('/favorites')
-@login_required
-def favorites():
-    favorite_books = Book.query.join(Favorite).filter(
-        Favorite.user_id == current_user.id,
-        Favorite.book_id.isnot(None)
-    ).all()
-    
-    favorite_characters = Character.query.join(Favorite).filter(
-        Favorite.user_id == current_user.id,
-        Favorite.character_id.isnot(None)
-    ).all()
-    
-    return render_template('favorites.html',
-                         favorite_books=favorite_books,
-                         favorite_characters=favorite_characters)
-
-@app.route('/chat/<int:character_id>', methods=['GET', 'POST'])
-@login_required
-def chat(character_id):
-    character = Character.query.get_or_404(character_id)
-    if request.method == 'POST':
-        message = request.form['message']
-        
-        # Save user message
-        conversation = Conversation(
-            user_id=current_user.id,
-            character_id=character_id,
-            message=message
-        )
-        db.session.add(conversation)
-        db.session.commit()
-        
-        # Generate AI response using character context
-        response = generate_character_response(
-            character_name=character.name,
-            character_description=character.description,
-            book_content=character.book.content,
-            user_message=message
-        )
-        
-        # Save character response
-        char_reply = Conversation(
-            user_id=current_user.id,
-            character_id=character_id,
-            message=response,
-            is_user=False
-        )
-        db.session.add(char_reply)
-        db.session.commit()
-        
         return jsonify({
-            'message': response,
-            'character_name': character.name
+            'success': True,
+            'images': optimized_images,
+            'base_path': f'/static/uploads/{name}'
         })
-    
-    conversations = Conversation.query.filter_by(
-        character_id=character_id,
-        user_id=current_user.id
-    ).order_by(Conversation.timestamp).all()
-    
-    return render_template('chat.html', 
-                         character=character,
-                         conversations=conversations)
+    except Exception as e:
+        if 'file_path' in locals() and os.path.exists(file_path):
+            os.remove(file_path)
+        return jsonify({'error': str(e)}), 500
+
+# Add responsive_image to template context
+@app.context_processor
+def utility_processor():
+    return dict(responsive_image=responsive_image)
