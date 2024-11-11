@@ -4,19 +4,36 @@
 
 {% block content %}
 <div class="row justify-content-center">
-    <div class="col-md-8">
-        <div class="card">
-            <div class="card-header">
-                <h3>Conversation with {{ character.name }}</h3>
-                <p class="text-muted">From: {{ character.book.title }}</p>
+    <div class="col-lg-8">
+        <div class="card shadow-sm">
+            <div class="card-header bg-transparent border-bottom">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h3 class="h4 mb-1">{{ character.name }}</h3>
+                        <p class="text-muted mb-0">
+                            <i class="bi bi-book me-1"></i>
+                            From: {{ character.book.title }}
+                        </p>
+                    </div>
+                    {% set is_character_favorite = current_user.favorites.filter_by(character_id=character.id).first() is not none %}
+                    <button class="btn {% if is_character_favorite %}btn-danger{% else %}btn-outline-danger{% endif %} toggle-favorite"
+                            data-type="character"
+                            data-id="{{ character.id }}">
+                        <i class="bi bi-heart{% if not is_character_favorite %}-fill{% endif %} me-1"></i>
+                        {% if is_character_favorite %}Remove from{% else %}Add to{% endif %} Favorites
+                    </button>
+                </div>
             </div>
-            <div class="card-body">
-                <div id="chatMessages" class="mb-4" style="height: 400px; overflow-y: auto;">
+            <div class="card-body p-4">
+                <div id="chatMessages" class="mb-4" style="height: 500px; overflow-y: auto;">
                     {% for conv in conversations %}
-                        <div class="message {% if conv.is_user %}user-message text-end{% else %}character-message{% endif %} mb-2">
-                            <div class="message-bubble p-2 rounded {% if conv.is_user %}bg-primary{% else %}bg-secondary{% endif %}">
-                                <small class="text-muted">{{ conv.timestamp.strftime('%H:%M') }}</small>
-                                <div>{{ conv.message }}</div>
+                        <div class="message {% if conv.is_user %}user-message text-end{% else %}character-message{% endif %} mb-3">
+                            <div class="message-bubble p-3 rounded">
+                                <div class="mb-1">{{ conv.message }}</div>
+                                <small class="text-muted">
+                                    <i class="bi bi-clock me-1"></i>
+                                    {{ conv.timestamp.strftime('%H:%M') }}
+                                </small>
                             </div>
                         </div>
                     {% endfor %}
@@ -26,7 +43,10 @@
                     <div class="input-group">
                         <input type="text" id="messageInput" class="form-control" 
                                placeholder="Type your message..." required>
-                        <button type="submit" class="btn btn-primary">Send</button>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-send me-1"></i>
+                            Send
+                        </button>
                     </div>
                 </form>
             </div>

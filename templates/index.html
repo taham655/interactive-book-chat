@@ -4,30 +4,51 @@
 
 {% block content %}
 <div class="row justify-content-center">
-    <div class="col-md-8 text-center">
-        <h1 class="display-4 mb-4">Welcome to TheFabled.ai</h1>
-        <p class="lead">Upload your favorite books and chat with the characters!</p>
+    <div class="col-lg-8 text-center">
+        <div class="mb-5">
+            <h1 class="display-4 mb-3">Welcome to TheFabled.ai</h1>
+            <p class="lead mb-4">Experience your favorite books in a new way by chatting with their characters!</p>
+            {% if not current_user.is_authenticated %}
+                <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+                    <a href="{{ url_for('login') }}" class="btn btn-primary btn-lg px-4 gap-3">
+                        <i class="bi bi-box-arrow-in-right me-2"></i> Login
+                    </a>
+                    <a href="{{ url_for('register') }}" class="btn btn-outline-secondary btn-lg px-4">
+                        <i class="bi bi-person-plus me-2"></i> Register
+                    </a>
+                </div>
+            {% endif %}
+        </div>
         
         {% if current_user.is_authenticated %}
             {% if recommended_books %}
-            <div class="card mt-4">
-                <div class="card-header">
-                    <h5 class="card-title mb-0">Recommended Books</h5>
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-transparent border-bottom">
+                    <h5 class="card-title mb-0">
+                        <i class="bi bi-stars me-2"></i>
+                        Recommended Books
+                    </h5>
                 </div>
                 <div class="card-body">
-                    <div class="row">
+                    <div class="row g-4">
                         {% for book in recommended_books %}
-                            <div class="col-md-6 mb-3">
-                                <div class="card h-100">
+                            <div class="col-md-6">
+                                <div class="card h-100 border-0 shadow-sm">
                                     <div class="card-body">
-                                        <h6 class="card-title">{{ book.title }}</h6>
+                                        <h6 class="card-title d-flex align-items-center">
+                                            <i class="bi bi-book me-2"></i>
+                                            {{ book.title }}
+                                        </h6>
                                         <p class="card-text">
-                                            <small class="text-muted">{{ book.characters.count() }} characters</small>
+                                            <small class="text-muted">
+                                                <i class="bi bi-people me-1"></i>
+                                                {{ book.characters.count() }} characters
+                                            </small>
                                         </p>
-                                        <div class="btn-group">
-                                            <div class="dropdown d-inline-block me-2">
+                                        <div class="d-flex gap-2">
+                                            <div class="dropdown">
                                                 <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
-                                                    Add to Library
+                                                    <i class="bi bi-collection me-1"></i> Add to Library
                                                 </button>
                                                 <ul class="dropdown-menu">
                                                     {% for library in current_user.libraries %}
@@ -47,11 +68,7 @@
                                             <button class="btn {% if is_book_favorite %}btn-danger{% else %}btn-outline-danger{% endif %} toggle-favorite"
                                                     data-type="book"
                                                     data-id="{{ book.id }}">
-                                                {% if is_book_favorite %}
-                                                    Remove from Favorites
-                                                {% else %}
-                                                    Add to Favorites
-                                                {% endif %}
+                                                <i class="bi bi-heart{% if not is_book_favorite %}-fill{% endif %}"></i>
                                             </button>
                                         </div>
                                     </div>
@@ -63,72 +80,92 @@
             </div>
             {% endif %}
 
-            <div class="card mt-4">
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-transparent border-bottom">
+                    <h5 class="card-title mb-0">
+                        <i class="bi bi-cloud-upload me-2"></i>
+                        Upload a Book
+                    </h5>
+                </div>
                 <div class="card-body">
-                    <h5 class="card-title">Upload a Book</h5>
                     <form id="uploadForm" class="mt-3">
                         <div class="mb-3">
-                            <input type="file" class="form-control" id="bookFile" accept=".pdf" required>
+                            <div class="input-group">
+                                <input type="file" class="form-control" id="bookFile" accept=".pdf" required>
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="bi bi-upload me-1"></i> Upload
+                                </button>
+                            </div>
+                            <div class="form-text">Upload PDF files only. Maximum size: 16MB</div>
                         </div>
-                        <button type="submit" class="btn btn-primary">Upload</button>
                     </form>
                 </div>
             </div>
 
             <div id="booksList" class="mt-4">
-                <h3>Your Books</h3>
+                <h3 class="h4 mb-4">
+                    <i class="bi bi-books me-2"></i>
+                    Your Books
+                </h3>
                 {% for book in current_user.books %}
-                    <div class="card mb-3">
+                    <div class="card shadow-sm mb-4">
                         <div class="card-body">
-                            <h5 class="card-title">{{ book.title }}</h5>
-                            <p class="card-text">Uploaded: {{ book.upload_date.strftime('%Y-%m-%d') }}</p>
+                            <div class="d-flex justify-content-between align-items-start mb-3">
+                                <h5 class="card-title mb-0">{{ book.title }}</h5>
+                                <span class="badge bg-secondary">
+                                    <i class="bi bi-calendar me-1"></i>
+                                    {{ book.upload_date.strftime('%Y-%m-%d') }}
+                                </span>
+                            </div>
                             
-                            <!-- Library and Favorite Actions -->
                             <div class="mb-3">
-                                <div class="dropdown d-inline-block me-2">
-                                    <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
-                                        Add to Library
-                                    </button>
-                                    <ul class="dropdown-menu">
-                                        {% for library in current_user.libraries %}
+                                <div class="btn-group">
+                                    <div class="dropdown">
+                                        <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                                            <i class="bi bi-collection me-1"></i> Add to Library
+                                        </button>
+                                        <ul class="dropdown-menu">
+                                            {% for library in current_user.libraries %}
+                                                <li>
+                                                    <button class="dropdown-item add-to-library" 
+                                                            data-library-id="{{ library.id }}"
+                                                            data-book-id="{{ book.id }}">
+                                                        {{ library.name }}
+                                                    </button>
+                                                </li>
+                                            {% else %}
+                                                <li><span class="dropdown-item disabled">No libraries</span></li>
+                                            {% endfor %}
+                                            <li><hr class="dropdown-divider"></li>
                                             <li>
-                                                <button class="dropdown-item add-to-library" 
-                                                        data-library-id="{{ library.id }}"
-                                                        data-book-id="{{ book.id }}">
-                                                    {{ library.name }}
-                                                </button>
+                                                <a class="dropdown-item" href="{{ url_for('libraries') }}">
+                                                    <i class="bi bi-gear me-1"></i> Manage Libraries
+                                                </a>
                                             </li>
-                                        {% else %}
-                                            <li><span class="dropdown-item disabled">No libraries</span></li>
-                                        {% endfor %}
-                                        <li><hr class="dropdown-divider"></li>
-                                        <li>
-                                            <a class="dropdown-item" href="{{ url_for('libraries') }}">
-                                                Manage Libraries
-                                            </a>
-                                        </li>
-                                    </ul>
+                                        </ul>
+                                    </div>
+                                    
+                                    {% set is_book_favorite = current_user.favorites.filter_by(book_id=book.id).first() is not none %}
+                                    <button class="btn {% if is_book_favorite %}btn-danger{% else %}btn-outline-danger{% endif %} toggle-favorite"
+                                            data-type="book"
+                                            data-id="{{ book.id }}">
+                                        <i class="bi bi-heart{% if not is_book_favorite %}-fill{% endif %} me-1"></i>
+                                        {% if is_book_favorite %}Remove from{% else %}Add to{% endif %} Favorites
+                                    </button>
                                 </div>
-                                
-                                {% set is_book_favorite = current_user.favorites.filter_by(book_id=book.id).first() is not none %}
-                                <button class="btn {% if is_book_favorite %}btn-danger{% else %}btn-outline-danger{% endif %} toggle-favorite"
-                                        data-type="book"
-                                        data-id="{{ book.id }}">
-                                    {% if is_book_favorite %}
-                                        Remove from Favorites
-                                    {% else %}
-                                        Add to Favorites
-                                    {% endif %}
-                                </button>
                             </div>
                             
                             <div class="character-list">
-                                <h6>Characters:</h6>
-                                {% for character in book.characters %}
-                                    <div class="d-inline-block me-2 mb-2">
+                                <h6 class="mb-3">
+                                    <i class="bi bi-people me-2"></i>
+                                    Characters:
+                                </h6>
+                                <div class="d-flex flex-wrap gap-2">
+                                    {% for character in book.characters %}
                                         <div class="btn-group">
                                             <a href="{{ url_for('chat', character_id=character.id) }}" 
-                                               class="btn btn-outline-secondary">
+                                               class="btn btn-outline-primary">
+                                                <i class="bi bi-chat-dots me-1"></i>
                                                 {{ character.name }}
                                             </a>
                                             {% set is_character_favorite = current_user.favorites.filter_by(character_id=character.id).first() is not none %}
@@ -139,16 +176,12 @@
                                                 <i class="bi bi-heart{% if not is_character_favorite %}-fill{% endif %}"></i>
                                             </button>
                                         </div>
-                                    </div>
-                                {% endfor %}
+                                    {% endfor %}
+                                </div>
                             </div>
                         </div>
                     </div>
                 {% endfor %}
-            </div>
-        {% else %}
-            <div class="mt-4">
-                <p>Please <a href="{{ url_for('login') }}">login</a> or <a href="{{ url_for('register') }}">register</a> to start.</p>
             </div>
         {% endif %}
     </div>
