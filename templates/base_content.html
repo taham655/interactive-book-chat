@@ -39,6 +39,13 @@
             </ul>
 
             <div class="mt-auto">
+                <select class="theme-selector" id="themeSelector">
+                    <option value="default">Default Theme</option>
+                    <option value="nature">Nature Theme</option>
+                    <option value="ocean">Ocean Theme</option>
+                    <option value="sunset">Sunset Theme</option>
+                </select>
+                
                 <hr>
                 {% if current_user.is_authenticated %}
                     <div class="d-flex align-items-center mb-3">
@@ -87,13 +94,20 @@
         // Theme management
         const themeToggleBtn = document.getElementById('themeToggle');
         const themeIcon = themeToggleBtn.querySelector('i');
+        const themeSelector = document.getElementById('themeSelector');
         const html = document.documentElement;
 
-        // Load theme from localStorage
+        // Load theme preferences from localStorage
         const savedTheme = localStorage.getItem('theme') || 'light';
+        const savedCustomTheme = localStorage.getItem('customTheme') || 'default';
+        
+        // Apply saved themes
         html.setAttribute('data-bs-theme', savedTheme);
+        html.setAttribute('data-custom-theme', savedCustomTheme);
+        themeSelector.value = savedCustomTheme;
         updateThemeIcon(savedTheme);
 
+        // Theme toggle (light/dark)
         themeToggleBtn.addEventListener('click', () => {
             const currentTheme = html.getAttribute('data-bs-theme');
             const newTheme = currentTheme === 'light' ? 'dark' : 'light';
@@ -101,6 +115,13 @@
             html.setAttribute('data-bs-theme', newTheme);
             localStorage.setItem('theme', newTheme);
             updateThemeIcon(newTheme);
+        });
+
+        // Custom theme selection
+        themeSelector.addEventListener('change', (e) => {
+            const selectedTheme = e.target.value;
+            html.setAttribute('data-custom-theme', selectedTheme);
+            localStorage.setItem('customTheme', selectedTheme);
         });
 
         function updateThemeIcon(theme) {

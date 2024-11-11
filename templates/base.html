@@ -255,7 +255,6 @@
         }
 
         .theme-selector {
-            margin-top: 1rem;
             padding: 0.5rem;
             background-color: var(--card-bg);
             border: 1px solid var(--border-color);
@@ -263,6 +262,7 @@
             color: var(--text-primary);
             width: 100%;
             cursor: pointer;
+            margin-bottom: 1rem;
         }
 
         .theme-selector:focus {
@@ -313,16 +313,6 @@
                 </button>
             </div>
 
-            <!-- Theme Selector -->
-            <div class="mb-4">
-                <select class="theme-selector" id="themeSelector">
-                    <option value="default">Default Theme</option>
-                    <option value="nature">Nature Theme</option>
-                    <option value="ocean">Ocean Theme</option>
-                    <option value="sunset">Sunset Theme</option>
-                </select>
-            </div>
-
             <ul class="nav flex-column mb-auto">
                 <li class="nav-item">
                     <a class="nav-link {% if request.endpoint == 'index' %}active{% endif %}" 
@@ -351,6 +341,14 @@
             </ul>
 
             <div class="mt-auto">
+                <!-- Theme Selector moved here -->
+                <select class="theme-selector" id="themeSelector">
+                    <option value="default">Default Theme</option>
+                    <option value="nature">Nature Theme</option>
+                    <option value="ocean">Ocean Theme</option>
+                    <option value="sunset">Sunset Theme</option>
+                </select>
+                
                 <hr>
                 {% if current_user.is_authenticated %}
                     <div class="d-flex align-items-center mb-3">
