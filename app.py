@@ -4,6 +4,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 from flask_migrate import Migrate
 from sqlalchemy.orm import DeclarativeBase
+from flask_cors import CORS
 
 class Base(DeclarativeBase):
     pass
@@ -13,6 +14,7 @@ login_manager = LoginManager()
 migrate = Migrate()
 
 app = Flask(__name__)
+CORS(app)
 app.secret_key = os.environ.get("FLASK_SECRET_KEY") or "thefabled-secret-key"
 app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get("DATABASE_URL")
 app.config["SQLALCHEMY_ENGINE_OPTIONS"] = {

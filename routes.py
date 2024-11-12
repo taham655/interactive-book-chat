@@ -2,19 +2,19 @@ from flask import render_template, redirect, url_for, flash, request, jsonify, s
 from flask_login import login_user, logout_user, login_required, current_user
 from app import app, db
 from models import User, Book, Character, Conversation, Library, Favorite
-from utils import (
-    process_pdf_content,
-    extract_text_from_epub,
-    extract_characters,
-    generate_character_response,
-    analyze_book,
-    create_character_prompt,
-    initialize_chat_model,
-    initialize_chat,
-    get_chatbot_response
-)
-from utils.recommendations import get_recommendations
-from utils.image_helpers import generate_responsive_images, get_image_dimensions
+# from utils import (
+#      process_pdf_content,
+#     extract_text_from_epub,
+#     extract_characters,
+#     generate_character_response,
+#     analyze_book,
+#     create_character_prompt,
+#     initialize_chat_model,
+#     initialize_chat,
+#     get_chatbot_response
+# )
+# from utils.recommendations import get_recommendations
+# from utils.image_helpers import generate_responsive_images, get_image_dimensions
 from werkzeug.utils import secure_filename
 import os
 import json
@@ -33,10 +33,12 @@ def allowed_image_file(filename):
 
 @app.route('/')
 def index():
-    recommended_books = []
-    if current_user.is_authenticated:
-        recommended_books = get_recommendations(current_user)
-    return render_template('index.html', recommended_books=recommended_books)
+    return render_template('index.html',
+        total_books=Book.query.count(),
+        total_characters=Character.query.count(),
+        total_conversations=Conversation.query.count(),
+        books=Book.query.all()
+    )
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -44,11 +46,11 @@ def register():
         username = request.form['username']
         email = request.form['email']
         password = request.form['password']
-        
+
         if User.query.filter_by(username=username).first():
             flash('Username already exists', 'error')
             return redirect(url_for('register'))
-            
+
         user = User(username=username, email=email)
         user.set_password(password)
         db.session.add(user)
@@ -62,18 +64,18 @@ def login():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
-        
+
         print(f"Login attempt for username: {username}")  # Debug print
-        
+
         user = User.query.filter_by(username=username).first()
         print(f"User query result: {user is not None}")  # Debug print
-        
+
         if user and user.check_password(password):
             print("Password verified successfully")  # Debug print
             login_user(user)
             flash('Logged in successfully.', 'success')
             return redirect(url_for('index'))
-        
+
         print("Login failed")  # Debug print
         flash('Invalid username or password', 'error')
     return render_template('login.html')
@@ -89,19 +91,19 @@ def logout():
 def upload_book():
     if 'file' not in request.files:
         return jsonify({'error': 'No file uploaded'}), 400
-        
+
     file = request.files['file']
     cover_image = request.files.get('cover_image')
-    
+
     if file.filename == '':
         return jsonify({'error': 'No file selected'}), 400
-        
+
     if not file.filename.endswith('.pdf'):
         return jsonify({'error': 'Only PDF files are supported'}), 400
 
     filename = secure_filename(file.filename)
-    content = process_pdf_content(file)
-    
+    # content = process_pdf_content(file)
+
     # Handle cover image if provided
     cover_path = None
     if cover_image and allowed_image_file(cover_image.filename):
@@ -109,21 +111,22 @@ def upload_book():
         base_path = os.path.join('uploads', 'books', os.path.splitext(image_filename)[0])
         cover_image_path = os.path.join(UPLOAD_FOLDER, 'books', image_filename)
         cover_image.save(cover_image_path)
-        
+
         # Generate responsive images
-        generate_responsive_images(cover_image_path, os.path.join(UPLOAD_FOLDER, 'books'))
+        # generate_responsive_images(cover_image_path, os.path.join(UPLOAD_FOLDER, 'books'))
         cover_path = base_path
-    
+
     book = Book(
         title=filename.replace('.pdf', ''),
-        content=content,
+        # content=content,
         user_id=current_user.id,
         cover_path=cover_path
     )
     db.session.add(book)
     db.session.commit()
-    
-    characters = extract_characters(content)
+
+    characters = "taha"
+    # extract_characters("Taha")
     for char_name, char_data in characters.items():
         character = Character(
             name=char_name,
@@ -136,7 +139,7 @@ def upload_book():
         )
         db.session.add(character)
     db.session.commit()
-    
+
     return jsonify({'success': True, 'book_id': book.id})
 
 @app.route('/libraries', methods=['GET', 'POST'])
@@ -145,16 +148,16 @@ def libraries():
     if request.method == 'POST':
         name = request.form.get('name')
         description = request.form.get('description')
-        
+
         if not name:
             flash('Library name is required')
             return redirect(url_for('libraries'))
-            
+
         library = Library(name=name, description=description, user_id=current_user.id)
         db.session.add(library)
         db.session.commit()
         flash('Library created successfully')
-        
+
     libraries = current_user.libraries.all()
     return render_template('libraries.html', libraries=libraries)
 
@@ -172,10 +175,10 @@ def library_detail(library_id):
 def add_book_to_library(library_id, book_id):
     library = Library.query.get_or_404(library_id)
     book = Book.query.get_or_404(book_id)
-    
+
     if library.user_id != current_user.id:
         return jsonify({'error': 'Access denied'}), 403
-        
+
     if book not in library.books:
         library.books.append(book)
         db.session.commit()
@@ -187,10 +190,10 @@ def add_book_to_library(library_id, book_id):
 def remove_book_from_library(library_id, book_id):
     library = Library.query.get_or_404(library_id)
     book = Book.query.get_or_404(book_id)
-    
+
     if library.user_id != current_user.id:
         return jsonify({'error': 'Access denied'}), 403
-        
+
     if book in library.books:
         library.books.remove(book)
         db.session.commit()
@@ -202,21 +205,21 @@ def remove_book_from_library(library_id, book_id):
 def toggle_favorite():
     book_id = request.form.get('book_id')
     character_id = request.form.get('character_id')
-    
+
     if not book_id and not character_id:
         return jsonify({'error': 'Either book_id or character_id is required'}), 400
-        
+
     existing_favorite = Favorite.query.filter_by(
         user_id=current_user.id,
         book_id=book_id,
         character_id=character_id
     ).first()
-    
+
     if existing_favorite:
         db.session.delete(existing_favorite)
         db.session.commit()
         return jsonify({'success': True, 'action': 'removed'})
-    
+
     favorite = Favorite(
         user_id=current_user.id,
         book_id=book_id,
@@ -233,12 +236,12 @@ def favorites():
         Favorite.user_id == current_user.id,
         Favorite.book_id.isnot(None)
     ).all()
-    
+
     favorite_characters = Character.query.join(Favorite).filter(
         Favorite.user_id == current_user.id,
         Favorite.character_id.isnot(None)
     ).all()
-    
+
     return render_template('favorites.html',
                          favorite_books=favorite_books,
                          favorite_characters=favorite_characters)
@@ -247,16 +250,16 @@ def favorites():
 @login_required
 def chat(character_id):
     character = Character.query.get_or_404(character_id)
-    
+
     if request.method == 'POST':
         message = request.form['message']
-        
+
         # Get existing conversation history
         conversations = Conversation.query.filter_by(
             character_id=character_id,
             user_id=current_user.id
         ).order_by(Conversation.timestamp).all()
-        
+
         # Format conversation history for the AI
         messages = [
             {
@@ -265,7 +268,7 @@ def chat(character_id):
             }
             for conv in conversations
         ]
-        
+
         # Create character prompt
         character_details = {
             'basic_info': {
@@ -284,9 +287,9 @@ def chat(character_id):
                 'memorable_quotes': character.emotional_profile.get('memorable_quotes', [])
             }
         }
-        
+
         character_prompt = create_character_prompt(character_details)
-        
+
         # Generate AI response using new system
         response = generate_character_response(
             character_prompt=character_prompt,
@@ -294,7 +297,7 @@ def chat(character_id):
             user_message=message,
             model=initialize_chat_model()  # Initialize model for this conversation
         )
-        
+
         # Save user message
         user_message = Conversation(
             user_id=current_user.id,
@@ -303,7 +306,7 @@ def chat(character_id):
             is_user=True
         )
         db.session.add(user_message)
-        
+
         # Save character response
         char_reply = Conversation(
             user_id=current_user.id,
@@ -313,19 +316,19 @@ def chat(character_id):
         )
         db.session.add(char_reply)
         db.session.commit()
-        
+
         return jsonify({
             'message': response,
             'character_name': character.name
         })
-    
+
     # GET request - show chat interface
     conversations = Conversation.query.filter_by(
         character_id=character_id,
         user_id=current_user.id
     ).order_by(Conversation.timestamp).all()
-    
-    return render_template('chat.html', 
+
+    return render_template('chat.html',
                          character=character,
                          conversations=conversations)
 
@@ -336,25 +339,25 @@ def initialize_character_chat():
     selected_character = request.json.get('character')
     if not selected_character:
         return jsonify({'error': 'No character selected'}), 400
-    
+
     try:
         # Load character analysis data
         with open('character_analysis.json', 'r', encoding='utf-8') as f:
             character_data = json.load(f)
-        
+
         # Initialize chat with selected character
         character_prompt, character_name = initialize_chat(selected_character, character_data)
-        
+
         # Store in session
         session['character_prompt'] = character_prompt
         session['current_character'] = character_name
         session['messages'] = []
-        
+
         return jsonify({
             'success': True,
             'character_name': character_name
         })
-        
+
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
@@ -364,11 +367,11 @@ def chat_message():
     """Handle individual chat messages"""
     if 'current_character' not in session:
         return jsonify({'error': 'No active character chat'}), 400
-    
+
     message = request.json.get('message')
     if not message:
         return jsonify({'error': 'No message provided'}), 400
-    
+
     try:
         # Get response using the character's prompt
         model = initialize_chat_model()
@@ -377,15 +380,15 @@ def chat_message():
             messages=session['messages'],
             model=model
         )
-        
+
         if response:
             # Update session messages
             session['messages'].append({"role": "user", "content": message})
             session['messages'].append({"role": "assistant", "content": response})
-            
+
             return jsonify({'response': response})
         else:
             return jsonify({'error': 'Failed to get response'}), 500
-            
+
     except Exception as e:
         return jsonify({'error': str(e)}), 500
