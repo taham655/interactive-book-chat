@@ -152,6 +152,12 @@
                                         <i class="bi bi-heart{% if not is_book_favorite %}-fill{% endif %} me-1"></i>
                                         {% if is_book_favorite %}Remove from{% else %}Add to{% endif %} Favorites
                                     </button>
+                                    
+                                    <button class="btn btn-outline-danger delete-book" 
+                                            data-book-id="{{ book.id }}"
+                                            data-book-title="{{ book.title }}">
+                                        <i class="bi bi-trash me-1"></i> Delete
+                                    </button>
                                 </div>
                             </div>
                             

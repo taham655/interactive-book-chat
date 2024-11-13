@@ -3,6 +3,15 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 from sqlalchemy.orm import DeclarativeBase
+from dotenv import load_dotenv
+
+load_dotenv()
+os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = os.getenv('GOOGLE_API_KEY')
+os.environ['LANGCHAIN_TRACING_V2'] = os.getenv('LANGCHAIN_TRACING_V2')
+os.environ['LANGCHAIN_ENDPOINT'] = os.getenv('LANGCHAIN_ENDPOINT')
+os.environ['LANGCHAIN_API_KEY'] = os.getenv('LANGCHAIN_API_KEY')
+os.environ['LANGCHAIN_PROJECT'] = os.getenv('LANGCHAIN_PROJECT')
+os.environ['OPENAI_API_KEY'] = os.getenv('OPENAI_API_KEY')
 
 class Base(DeclarativeBase):
     pass
@@ -12,14 +21,21 @@ login_manager = LoginManager()
 
 app = Flask(__name__)
 app.secret_key = os.environ.get("FLASK_SECRET_KEY") or "thefabled-secret-key"
-app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get("DATABASE_URL")
+app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///book_chat.db"
 app.config["SQLALCHEMY_ENGINE_OPTIONS"] = {
     "pool_recycle": 300,
     "pool_pre_ping": True,
 }
 app.config["MAX_CONTENT_LENGTH"] = 16 * 1024 * 1024  # 16MB max file size
-app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'your-secret-key-here')  # Required for sessions
-app.config['SESSION_TYPE'] = 'filesystem'  # Store sessions in filesystem
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'your-secret-key-here')
+app.config['SESSION_TYPE'] = 'filesystem'
+
+UPLOAD_FOLDER = os.path.join('static', 'uploads')
+os.makedirs(os.path.join(UPLOAD_FOLDER, 'books'), exist_ok=True)
+os.makedirs(os.path.join(UPLOAD_FOLDER, 'characters'), exist_ok=True)
+
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
 
 db.init_app(app)
 login_manager.init_app(app)

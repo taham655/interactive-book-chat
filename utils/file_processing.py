@@ -3,13 +3,17 @@ import re
 from bs4 import BeautifulSoup
 import ebooklib
 from ebooklib import epub
-from typing import Dict, List
+from typing import Dict
 from .character_analysis import (
-    BasicCharacter,
-    BasicCharacterList,
-    CharacterDescription,
-    CharacterDepth,
     analyze_book
+)
+
+from .models import (
+    BasicCharacter,  # Add this import
+    BasicCharacterList, 
+    CharacterDescriptionList, 
+    CharacterDepthList,
+    CharacterAnalysis
 )
 
 def process_pdf_content(file) -> str:
@@ -66,7 +70,7 @@ def extract_text_from_epub(epub_path: str) -> str:
     final_text = '\n\n'.join(chapters)
     return final_text
 
-def extract_characters(content: str) -> Dict:
+async def extract_characters(content: str) -> Dict:
     """
     Extract and analyze characters from text content using the EnhancedBookAnalyzer approach.
     This function serves as a wrapper around the analyze_book function to maintain
@@ -74,7 +78,7 @@ def extract_characters(content: str) -> Dict:
     """
     try:
         # Use the enhanced book analyzer to perform character analysis
-        analysis_result = analyze_book(content)
+        analysis_result = await analyze_book(content)
         
         # Convert the analysis result into the expected format
         characters = {}
@@ -103,7 +107,7 @@ def extract_characters(content: str) -> Dict:
                 },
                 "relationships": basic_char["key_relationships"],
                 "personality_summary": basic_char["plot_importance"],
-                "role": basic_char["role"],
+                "role": basic_char.get("role", "Unknown"),  # Add role from basic info
                 "importance_level": basic_char["importance_level"],
                 "llm_persona_prompt": description["llm_persona_prompt"] if description else ""
             }
@@ -112,29 +116,3 @@ def extract_characters(content: str) -> Dict:
         
     except Exception as e:
         print(f"Error in enhanced character extraction: {str(e)}")
-        # Fallback to basic character extraction if enhanced analysis fails
-        return _basic_character_extraction(content)
-
-def _basic_character_extraction(content: str) -> Dict:
-    """
-    Fallback method for basic character extraction when enhanced analysis fails.
-    """
-    characters = {}
-    name_pattern = r'([A-Z][a-z]+(?:\s[A-Z][a-z]+)*)'
-    potential_names = re.findall(name_pattern, content)
-    
-    for name in set(potential_names):
-        if len(name.split()) >= 1:  # Only names with at least one word
-            context = content[max(0, content.find(name)-100):content.find(name)+100]
-            characters[name] = {
-                "description": f"Character appearing in the context: {context}",
-                "personality_traits": [],
-                "emotional_profile": {},
-                "relationships": [],
-                "personality_summary": "Basic character identification",
-                "role": "Unknown",
-                "importance_level": 1,
-                "llm_persona_prompt": f"You are {name}, a character mentioned in the story."
-            }
-    
-    return characters

@@ -18,6 +18,7 @@ from utils.image_helpers import generate_responsive_images, get_image_dimensions
 from werkzeug.utils import secure_filename
 import os
 import json
+import asyncio
 
 # Add new constant for image upload directory
 UPLOAD_FOLDER = os.path.join('static', 'uploads')
@@ -71,60 +72,86 @@ def logout():
     logout_user()
     return redirect(url_for('index'))
 
+@app.route('/upload-section')
+@login_required
+def upload_section():
+    """Upload section page"""
+    return render_template('upload.html')
+
 @app.route('/upload', methods=['POST'])
 @login_required
 def upload_book():
-    if 'file' not in request.files:
-        return jsonify({'error': 'No file uploaded'}), 400
+    try:
+        if 'file' not in request.files:
+            return jsonify({'error': 'No file uploaded'}), 400
+            
+        file = request.files['file']
+        cover_image = request.files.get('cover_image')
         
-    file = request.files['file']
-    cover_image = request.files.get('cover_image')
-    
-    if file.filename == '':
-        return jsonify({'error': 'No file selected'}), 400
-        
-    if not file.filename.endswith('.pdf'):
-        return jsonify({'error': 'Only PDF files are supported'}), 400
+        if file.filename == '':
+            return jsonify({'error': 'No file selected'}), 400
+            
+        if not file.filename.endswith('.pdf'):
+            return jsonify({'error': 'Only PDF files are supported'}), 400
 
-    filename = secure_filename(file.filename)
-    content = process_pdf_content(file)
-    
-    # Handle cover image if provided
-    cover_path = None
-    if cover_image and allowed_image_file(cover_image.filename):
-        image_filename = secure_filename(cover_image.filename)
-        base_path = os.path.join('uploads', 'books', os.path.splitext(image_filename)[0])
-        cover_image_path = os.path.join(UPLOAD_FOLDER, 'books', image_filename)
-        cover_image.save(cover_image_path)
-        
-        # Generate responsive images
-        generate_responsive_images(cover_image_path, os.path.join(UPLOAD_FOLDER, 'books'))
-        cover_path = base_path
-    
-    book = Book(
-        title=filename.replace('.pdf', ''),
-        content=content,
-        user_id=current_user.id,
-        cover_path=cover_path
-    )
-    db.session.add(book)
-    db.session.commit()
-    
-    characters = extract_characters(content)
-    for char_name, char_data in characters.items():
-        character = Character(
-            name=char_name,
-            description=char_data["description"],
-            personality_traits=char_data["personality_traits"],
-            emotional_profile=char_data["emotional_profile"],
-            relationships=char_data["relationships"],
-            personality_summary=char_data["personality_summary"],
-            book_id=book.id
+        # Save the file first
+        filename = secure_filename(file.filename)
+        file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+        file.save(file_path)
+
+        # Process the saved file
+        try:
+            content = process_pdf_content(file_path)
+        except Exception as e:
+            os.remove(file_path)  # Clean up the file if processing fails
+            return jsonify({'error': f'Failed to process PDF: {str(e)}'}), 500
+
+        # Handle cover image
+        cover_path = None
+        if cover_image and allowed_image_file(cover_image.filename):
+            try:
+                image_filename = secure_filename(cover_image.filename)
+                base_path = os.path.join('uploads', 'books', os.path.splitext(image_filename)[0])
+                cover_image_path = os.path.join(UPLOAD_FOLDER, 'books', image_filename)
+                cover_image.save(cover_image_path)
+                generate_responsive_images(cover_image_path, os.path.join(UPLOAD_FOLDER, 'books'))
+                cover_path = base_path
+            except Exception as e:
+                return jsonify({'error': f'Failed to process cover image: {str(e)}'}), 500
+
+        # Create book record
+        book = Book(
+            title=filename.replace('.pdf', ''),
+            content=content,
+            user_id=current_user.id,
+            cover_path=cover_path
         )
-        db.session.add(character)
-    db.session.commit()
-    
-    return jsonify({'success': True, 'book_id': book.id})
+        db.session.add(book)
+        db.session.commit()
+
+        # Process characters
+        try:
+            characters = asyncio.run(extract_characters(content))
+            for char_name, char_data in characters.items():
+                character = Character(
+                    name=char_name,
+                    description=char_data["description"],
+                    personality_traits=char_data["personality_traits"],
+                    emotional_profile=char_data["emotional_profile"],
+                    relationships=char_data["relationships"],
+                    personality_summary=char_data["personality_summary"],
+                    book_id=book.id
+                )
+                db.session.add(character)
+            db.session.commit()
+        except Exception as e:
+            return jsonify({'error': f'Failed to process characters: {str(e)}'}), 500
+
+        return jsonify({'success': True, 'book_id': book.id})
+
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'error': f'Upload failed: {str(e)}'}), 500
 
 @app.route('/libraries', methods=['GET', 'POST'])
 @login_required
@@ -230,6 +257,40 @@ def favorites():
                          favorite_books=favorite_books,
                          favorite_characters=favorite_characters)
 
+@app.route('/book/<int:book_id>/delete', methods=['POST'])
+@login_required
+def delete_book(book_id):
+    book = Book.query.get_or_404(book_id)
+    
+    if book.user_id != current_user.id:
+        return jsonify({'error': 'Access denied'}), 403
+        
+    try:
+        # Get all character IDs for this book first
+        character_ids = [char.id for char in Character.query.filter_by(book_id=book_id).all()]
+        
+        # Delete conversations for all characters
+        for char_id in character_ids:
+            Conversation.query.filter_by(character_id=char_id).delete(synchronize_session='fetch')
+            
+        # Delete favorites
+        Favorite.query.filter_by(book_id=book_id).delete(synchronize_session='fetch')
+        
+        # Delete characters
+        Character.query.filter_by(book_id=book_id).delete(synchronize_session='fetch')
+        
+        # Remove book from libraries
+        book.libraries = []
+        
+        # Delete the book
+        db.session.delete(book)
+        db.session.commit()
+        
+        return jsonify({'success': True})
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'error': str(e)}), 500
+
 @app.route('/chat/<int:character_id>', methods=['GET', 'POST'])
 @login_required
 def chat(character_id):
@@ -253,22 +314,22 @@ def chat(character_id):
             for conv in conversations
         ]
         
-        # Create character prompt
+        # Create character prompt with safe fallbacks
         character_details = {
             'basic_info': {
                 'name': character.name,
-                'role': character.role,
-                'plot_importance': character.personality_summary,
-                'key_relationships': character.relationships
+                'role': getattr(character, 'role', 'Unknown'),  # Fallback if role is missing
+                'plot_importance': character.personality_summary or '',
+                'key_relationships': character.relationships or []
             },
             'description': {
-                'detailed_description': character.description,
-                'llm_persona_prompt': character.llm_persona_prompt
+                'detailed_description': character.description or '',
+                'llm_persona_prompt': getattr(character, 'llm_persona_prompt', '')
             },
             'depth': {
-                'character_arc': character.emotional_profile.get('character_arc', ''),
-                'personality_traits': character.personality_traits,
-                'memorable_quotes': character.emotional_profile.get('memorable_quotes', [])
+                'character_arc': character.emotional_profile.get('character_arc', '') if character.emotional_profile else '',
+                'personality_traits': character.personality_traits or [],
+                'memorable_quotes': character.emotional_profile.get('memorable_quotes', []) if character.emotional_profile else []
             }
         }
         
@@ -279,7 +340,7 @@ def chat(character_id):
             character_prompt=character_prompt,
             messages=messages,
             user_message=message,
-            model=initialize_chat_model()  # Initialize model for this conversation
+            model=initialize_chat_model()
         )
         
         # Save user message

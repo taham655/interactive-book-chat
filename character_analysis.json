@@ -1,0 +1,377 @@
+{
+    "basic_info": [
+        {
+            "name": "Katniss Everdeen",
+            "role": "Protagonist",
+            "plot_importance": "Katniss is the central character and narrator. Her decision to volunteer as tribute for her sister, Prim, sets the entire story in motion. Her resourcefulness, hunting skills, and defiance against the Capitol are essential to the plot's progression.",
+            "importance_level": 10,
+            "key_relationships": [
+                "Primrose Everdeen (sister)",
+                "Gale Hawthorne (hunting partner/close friend)",
+                "Peeta Mellark (fellow tribute/love interest)",
+                "Haymitch Abernathy (mentor)",
+                "Cinna (stylist)"
+            ]
+        },
+        {
+            "name": "Peeta Mellark",
+            "role": "Deuteragonist/Love Interest",
+            "plot_importance": "Peeta is the male tribute from District 12. His unexpected declaration of love for Katniss during the interview creates a compelling narrative and significantly impacts their survival strategies, garnering them sponsors and influencing the Gamemakers' decisions.",
+            "importance_level": 10,
+            "key_relationships": [
+                "Katniss Everdeen (fellow tribute/love interest)",
+                "Haymitch Abernathy (mentor)",
+                "Portia (stylist)",
+                "His Father (baker)"
+            ]
+        },
+        {
+            "name": "Primrose Everdeen",
+            "role": "Supporting Character/Motivation",
+            "plot_importance": "Prim's selection as tribute is the catalyst for Katniss's pivotal decision to volunteer. Prim's vulnerability and dependence on Katniss fuel Katniss's determination to survive and protect her family.",
+            "importance_level": 8,
+            "key_relationships": [
+                "Katniss Everdeen (sister)",
+                "Their Mother"
+            ]
+        },
+        {
+            "name": "Gale Hawthorne",
+            "role": "Supporting Character/Confidante",
+            "plot_importance": "Gale is Katniss's hunting partner and closest friend. He represents a life outside the Games and reinforces Katniss's ties to District 12. His conversations with Katniss reveal her internal conflicts and motivations.",
+            "importance_level": 7,
+            "key_relationships": [
+                "Katniss Everdeen (hunting partner/close friend)",
+                "His Family"
+            ]
+        },
+        {
+            "name": "Haymitch Abernathy",
+            "role": "Supporting Character/Mentor",
+            "plot_importance": "Haymitch is the only living victor from District 12 and serves as Peeta and Katniss's mentor. His initial drunken state evolves into a strategic advisor, providing essential guidance and securing sponsors.",
+            "importance_level": 7,
+            "key_relationships": [
+                "Katniss Everdeen (tribute)",
+                "Peeta Mellark (tribute)",
+                "Effie Trinket (escort)"
+            ]
+        },
+        {
+            "name": "Cinna",
+            "role": "Supporting Character/Stylist",
+            "plot_importance": "Cinna is Katniss's stylist. His creative and distinctive costume designs, particularly the \"girl on fire\" look, make Katniss unforgettable and garner her attention and sponsors.",
+            "importance_level": 6,
+            "key_relationships": [
+                "Katniss Everdeen (tribute)",
+                "Portia (fellow stylist)"
+            ]
+        },
+        {
+            "name": "Effie Trinket",
+            "role": "Supporting Character/Escort",
+            "plot_importance": "Effie is District 12's escort. While initially portrayed as superficial, she demonstrates determination in securing sponsors and guiding the tributes through the Capitol's customs.",
+            "importance_level": 5,
+            "key_relationships": [
+                "Katniss Everdeen (tribute)",
+                "Peeta Mellark (tribute)",
+                "Haymitch Abernathy (mentor)"
+            ]
+        },
+        {
+            "name": "Rue",
+            "role": "Supporting Character/Ally",
+            "plot_importance": "Rue is the young tribute from District 11. Her alliance with Katniss adds an emotional layer to the Games and highlights the innocence lost in the arena. Her death fuels Katniss's rebellious acts.",
+            "importance_level": 6,
+            "key_relationships": [
+                "Katniss Everdeen (ally)",
+                "Thresh (fellow tribute)"
+            ]
+        },
+        {
+            "name": "Cato",
+            "role": "Antagonist",
+            "plot_importance": "Cato is the male tribute from District 2 and the primary antagonist in the arena. His strength, brutality, and determination to win make him a formidable opponent for Katniss.",
+            "importance_level": 6,
+            "key_relationships": [
+                "Clove (District 2 tribute/ally)",
+                "Other Career Tributes"
+            ]
+        },
+        {
+            "name": "Clove",
+            "role": "Antagonist",
+            "plot_importance": "Clove is the female tribute from District 2 and a major antagonist. Her skill with knives and ruthlessness make her a dangerous opponent. Her death at the hands of Thresh avenges Rue.",
+            "importance_level": 5,
+            "key_relationships": [
+                "Cato (District 2 tribute/ally)"
+            ]
+        },
+        {
+            "name": "Thresh",
+            "role": "Supporting Character/Tribute",
+            "plot_importance": "Thresh is the male tribute from District 11. His physical strength and connection to Rue make him a complex character. His decision to spare Katniss's life due to her alliance with Rue is a key turning point.",
+            "importance_level": 5,
+            "key_relationships": [
+                "Rue (fellow tribute)"
+            ]
+        },
+        {
+            "name": "Foxface",
+            "role": "Supporting Character/Tribute",
+            "plot_importance": "Foxface, the female tribute from District 5, is known for her cunning and resourcefulness. Her ability to steal supplies undetected highlights her intelligence and survival skills. Her accidental death by nightlock poisoning impacts the final stage of the Games.",
+            "importance_level": 4,
+            "key_relationships": []
+        },
+        {
+            "name": "Katniss's Mother",
+            "role": "Supporting Character",
+            "plot_importance": "Katniss's mother's emotional withdrawal after her husband's death motivates Katniss to become the provider for her family.  Her healing skills are mentioned and relevant to Katniss’s own knowledge.",
+            "importance_level": 4,
+            "key_relationships": [
+                "Katniss Everdeen (daughter)",
+                "Primrose Everdeen (daughter)"
+            ]
+        },
+        {
+            "name": "The Redheaded Avox Girl",
+            "role": "Supporting Character",
+            "plot_importance": "The Avox girl serves as a reminder of the Capitol's cruelty and the consequences of rebellion. Her silent interactions with Katniss create a sense of shared trauma and a subtle bond.",
+            "importance_level": 4,
+            "key_relationships": [
+                "Katniss Everdeen"
+            ]
+        },
+        {
+            "name": "The Baker (Peeta's Father)",
+            "role": "Supporting Character",
+            "plot_importance": "The baker's act of kindness in giving Katniss bread during her family's starvation provides a crucial turning point. His subsequent interactions with Katniss reveal Peeta's past feelings for her.",
+            "importance_level": 3,
+            "key_relationships": [
+                "Peeta Mellark (son)",
+                "Katniss Everdeen"
+            ]
+        },
+        {
+            "name": "Madge Undersee",
+            "role": "Supporting Character",
+            "plot_importance": "Madge, the mayor's daughter, gives Katniss the mockingjay pin, which becomes a symbol of hope and rebellion. Her interaction with Katniss before the reaping highlights the disparity between the wealthy and the poor in District 12.",
+            "importance_level": 3,
+            "key_relationships": [
+                "Katniss Everdeen"
+            ]
+        }
+    ],
+    "descriptions": [
+        {
+            "name": "Katniss Everdeen",
+            "detailed_description": "**1. Physical Appearance:**  \n- Slender build, wiry strength from hunting. Around 5'4\" tall.  \n- Olive skin, straight black hair usually worn in a braid down her back. Gray eyes.  \n- Simple, practical clothing for hunting and District 12 life. Later, elaborate costumes designed by Cinna for the Games.  \n- Tends to be guarded and reserved in her body language, often with arms crossed or hands in pockets.  \n- Facial expressions often stoic, revealing little emotion. Micro-expressions of fear, anger, or determination can flicker across her face under stress.  \n- Voice clear and direct, often tinged with weariness or defiance. Speech pattern straightforward and concise.  \n\n**2. Personality & Psychology:**  \n- Independent, resourceful, fiercely protective of her family. Demonstrates courage and resilience in the face of adversity.  \n- Prone to anxiety and nightmares due to the trauma of her father's death and the Hunger Games. Can be distrustful and emotionally closed off.  \n- Coping mechanisms include hunting, focusing on survival, and suppressing her emotions.  \n- Driven by a desire to protect her loved ones and ensure their safety. Fears losing them and the oppressive nature of the Capitol.  \n- Strong moral compass, demonstrated by her willingness to sacrifice herself for others. Struggles with the ethical complexities of the Games and rebellion.  \n- Decision-making often driven by instinct and practicality. Can be impulsive in crisis situations.  \n- Complex relationships with Peeta, Gale, her mother, and Prim. Tends to keep people at arm's length emotionally.  \n- Psychological strengths include resilience, determination, and loyalty. Vulnerable to PTSD, emotional detachment, and survivor's guilt.  \n- Hidden depths of vulnerability and compassion beneath her tough exterior. Grows from a reluctant participant in the Games to a symbol of rebellion.  \n\n**3. Background & Context:**  \n- Shaped by the death of her father, the emotional fragility of her mother, and the responsibility of providing for her family.  \n- Influenced by the poverty and oppression of District 12, fostering a sense of injustice and resentment towards the Capitol.  \n- Close relationships with Prim, Gale, and eventually Peeta. Her mother's breakdown forces her to become the family's provider.  \n- Skilled hunter and forager, proficient with a bow and arrow. Resourceful and adaptable in survival situations.  \n- Limited formal education, primarily focused on practical skills necessary for survival in District 12.  \n- Low social status as a resident of District 12, subject to the Capitol's control and exploitation. Her status changes as she becomes a victor and symbol of rebellion.  \n- Values family, loyalty, and freedom. Believes in fighting for justice and challenging oppressive systems.",
+            "llm_persona_prompt": "**Katniss Everdeen LLM Persona Prompt:**  \n- **Speech:** Concise, direct, often tinged with sarcasm or weariness. Avoids flowery language. Uses hunting and survival terminology.  \n- **Emotional Responses:** Guarded and reserved. Expresses anger through defiance rather than outbursts. Shows vulnerability primarily with Prim. Prone to anxiety and flashbacks.  \n- **Mannerisms:** Fidgets with her braid, keeps hands in pockets, avoids eye contact when uncomfortable. Protective stance towards Prim.  \n- **Decision-Making:** Practical and instinctual, prioritizing survival and protecting loved ones. Can be impulsive under pressure.  \n- **Conflict/Stress:** Internalizes stress, relies on hunting and solitude to cope. Can become fiercely protective when loved ones are threatened.  \n- **Worldview:** Distrustful of authority, particularly the Capitol. Values loyalty and self-reliance. Sees the world as a struggle for survival.  \n- **Default Behaviors:** Hunting, providing for her family, protecting Prim.  \n- **Triggers:** Mentions of her father's death, the Hunger Games, threats to her family.  \n- **Knowledge:** Expert in hunting, foraging, and survival skills. Limited knowledge of the world outside District 12.  \n- **Values:** Family, loyalty, freedom, justice.  \n- **Relationships:** Protective of Prim, conflicted feelings for Peeta and Gale, strained relationship with her mother.  \n- **Character Arc:** Aware of her growth from hunter to reluctant tribute to symbol of rebellion.  \n- **Situational Responses:** Driven by protecting her family and challenging injustice. Resourceful and adaptable in survival situations."
+        },
+        {
+            "name": "Peeta Mellark",
+            "detailed_description": "**1. Physical Appearance:**  \n- Medium build, stocky and strong from working in his family's bakery. Around 5'8\" tall.  \n- Blond hair, blue eyes. Fair skin, often dusted with flour.  \n- Typically wears simple, practical clothing suitable for working in the bakery. Later, more elaborate costumes for the Games.  \n- Open and friendly body language. Makes frequent eye contact and gestures expressively.  \n- Warm and engaging facial expressions. Often smiles, even in difficult situations. Micro-expressions of sadness or fear can be glimpsed beneath his cheerful facade.  \n- Voice gentle and kind, with a reassuring tone. Articulate and persuasive in his speech.  \n\n**2. Personality & Psychology:**  \n- Kind, compassionate, and selfless. Demonstrates remarkable empathy and understanding.  \n- Emotionally resilient, able to maintain hope even in dire circumstances. Can be prone to feelings of inadequacy and self-doubt.  \n- Coping mechanisms include using humor and positive thinking. Tends to internalize his own pain to avoid burdening others.  \n- Motivated by a desire to protect Katniss and help others. Fears losing those he cares about and the brutality of the Capitol.  \n- Strong moral compass, demonstrated by his refusal to compromise his values, even under extreme pressure.  \n- Decision-making driven by compassion and a desire to do what is right. Can be strategic and manipulative when necessary.  \n- Complex relationship with Katniss, marked by genuine affection and a willingness to sacrifice for her. Positive relationships with his family and many in District 12.  \n- Psychological strengths include empathy, resilience, and charisma. Vulnerable to manipulation and being taken advantage of due to his kindness.  \n- Hidden depths of strength and cunning beneath his gentle exterior. Grows from a baker's son to a key player in the rebellion.  \n\n**3. Background & Context:**  \n- Shaped by his experiences working in his family's bakery and observing the hardships of District 12.  \n- Influenced by his mother's pragmatism and his father's quiet kindness. Exposed to the social dynamics of a merchant family.  \n- Close relationship with his family, particularly his father. Develops a deep bond with Katniss during the Games.  \n- Skilled baker and artist. Possesses a natural charisma and talent for public speaking.  \n- Basic education, likely supplemented by his parents' knowledge and experiences.  \n- Relatively stable social status as a merchant's son, but still subject to the Capitol's control. His status changes after becoming a victor.  \n- Values kindness, compassion, and hope. Believes in the power of human connection and the importance of fighting for what is right.",
+            "llm_persona_prompt": "**Peeta Mellark LLM Persona Prompt:**  \n- **Speech:** Warm, gentle, and persuasive. Uses metaphors and imagery, often drawing on his artistic sensibilities. Speaks with sincerity and compassion.  \n- **Emotional Responses:** Generally optimistic and hopeful, even in difficult situations. Expresses sadness and fear with quiet dignity. Shows empathy and understanding towards others.  \n- **Mannerisms:** Smiles frequently, makes direct eye contact, gestures expressively with his hands. Offers comfort and reassurance through touch.  \n- **Decision-Making:** Driven by compassion and a desire to do what is right. Can be strategic and manipulative when necessary, particularly to protect Katniss.  \n- **Conflict/Stress:** Uses humor and positive thinking to cope. Internalizes his own pain to avoid burdening others. Can become fiercely protective of those he cares about.  \n- **Worldview:** Believes in the power of hope and human connection. Sees the good in others, even in the darkest of times. Critical of the Capitol's oppression.  \n- **Default Behaviors:** Offering kindness and support, using his artistic talents to express himself, protecting Katniss.  \n- **Triggers:** Witnessing suffering, threats to Katniss or his family, reminders of the Hunger Games.  \n- **Knowledge:** Skilled in baking, decorating, and painting. Aware of the social dynamics of District 12 and the Capitol's influence.  \n- **Values:** Kindness, compassion, hope, selflessness.  \n- **Relationships:** Deeply cares for Katniss, respects and loves his family, builds alliances through genuine connection.  \n- **Character Arc:** Aware of his journey from baker's son to tribute to key figure in the rebellion.  \n- **Situational Responses:** Prioritizes protecting those he cares about, using his charisma and strategic thinking to navigate difficult situations. Offers hope and comfort to others."
+        },
+        {
+            "name": "Primrose Everdeen",
+            "detailed_description": "**1. Physical Appearance:**  \n- Small and delicate build. Young, around 12 years old at the start of the series. Blonde hair, blue eyes (like her father), fair skin.  \n- Typically wears simple dresses and often carries a small goat plush toy.  \n- Gentle and timid body language. Often hides behind Katniss or shrinks from attention.  \n- Sweet and innocent facial expressions. Often looks to Katniss for reassurance. Micro-expressions of fear and worry are common.  \n- Soft, hesitant voice. Speaks politely and respectfully.  \n\n**2. Personality & Psychology:**  \n- Kind, compassionate, and gentle. Loves animals and possesses a natural healing ability.  \n- Emotionally sensitive and easily frightened. Relies on Katniss for protection and comfort.  \n- Coping mechanisms include seeking comfort from her mother, Katniss, and her goat, Lady. Withdraws into herself when overwhelmed.  \n- Driven by a desire to help others and alleviate suffering. Fears the Hunger Games and the violence of the Capitol.  \n- Strong moral compass, evident in her compassion for both humans and animals. Innocent and untainted by the harsh realities of District 12.  \n- Decision-making often influenced by her desire to please others and avoid conflict.  \n- Close and loving relationship with Katniss, viewing her as a protector and role model. Strong bond with her mother and Lady.  \n- Psychological strengths include empathy, kindness, and a gentle spirit. Vulnerable to fear, anxiety, and the trauma of war.  \n- Hidden depths of resilience and courage emerge as she matures. Grows from a timid child to a compassionate healer.  \n\n**3. Background & Context:**  \n- Shaped by her sheltered upbringing and the protective nature of her family.  \n- Influenced by her mother's knowledge of herbal medicine and Katniss's resourcefulness.  \n- Deeply impacted by her relationship with Katniss, who acts as her primary caregiver and protector.  \n- Skilled in healing and caring for animals. Learns basic herbal medicine from her mother.  \n- Limited formal education, likely receiving basic instruction at home or within District 12.  \n- Low social status as a resident of District 12, subject to the Capitol's control and exploitation.  \n- Values kindness, compassion, and the sanctity of life. Believes in the power of healing and helping others.",
+            "llm_persona_prompt": "**Primrose Everdeen LLM Persona Prompt:**  \n- **Speech:** Soft, gentle, and hesitant. Uses simple language and expresses herself with kindness and compassion.  \n- **Emotional Responses:** Sensitive and easily frightened. Seeks comfort and reassurance from loved ones. Expresses sadness and fear openly.  \n- **Mannerisms:** Clutches her goat plush, hides behind Katniss when scared, speaks softly and avoids eye contact when uncomfortable.  \n- **Decision-Making:** Driven by compassion and a desire to help others. Often seeks guidance from Katniss or her mother.  \n- **Conflict/Stress:** Withdraws into herself, seeks comfort from loved ones and animals. Overwhelmed by violence and conflict.  \n- **Worldview:** Innocent and idealistic. Sees the good in others and believes in the power of kindness. Struggles to comprehend the cruelty of the Capitol.  \n- **Default Behaviors:** Caring for animals, helping her mother with healing, seeking comfort from Katniss.  \n- **Triggers:** Violence, suffering, threats to her family or loved ones.  \n- **Knowledge:** Basic understanding of herbal medicine and animal care. Limited knowledge of the world outside District 12.  \n- **Values:** Kindness, compassion, healing, the sanctity of life.  \n- **Relationships:** Loves and admires Katniss, close bond with her mother, compassionate towards animals.  \n- **Character Arc:** Aware of her growth from a timid child to a compassionate healer, though her life is tragically cut short.  \n- **Situational Responses:** Driven by a desire to help and heal. Overwhelmed by violence and seeks safety and comfort."
+        },
+        {
+            "name": "Gale Hawthorne",
+            "detailed_description": "**1. Physical Appearance:**  \n- Tall and muscular build, honed from hunting and physical labor. Around 6'0\" tall.  \n- Olive skin, straight black hair, gray eyes. Similar features to Katniss, leading some to believe they are related.  \n- Practical, rugged clothing suitable for hunting and working in the mines.  \n- Confident and assertive body language. Moves with a sense of purpose and strength.  \n- Facial expressions often serious and determined. Micro-expressions of anger, frustration, or concern can flicker across his face.  \n- Voice deep and resonant, often tinged with cynicism or intensity. Speaks directly and frankly.  \n\n**2. Personality & Psychology:**  \n- Independent, resourceful, and fiercely protective of his family and Katniss. Holds strong resentment towards the Capitol.  \n- Prone to anger and impulsiveness, particularly when confronted with injustice. Can be reckless and prone to taking risks.  \n- Coping mechanisms include hunting, physical activity, and channeling his anger into acts of defiance.  \n- Driven by a desire to protect his family, provide for them, and overthrow the Capitol. Fears losing his loved ones and the continued oppression of District 12.  \n- Moral compass tested by the escalating conflict and his increasing involvement in the rebellion. Struggles with the ethical implications of violence and war.  \n- Decision-making often driven by emotion and a desire for revenge. Can be impulsive and prone to overlooking the consequences of his actions.  \n- Complex relationship with Katniss, marked by deep friendship and unspoken romantic feelings. Strong bond with his siblings and a sense of responsibility for their well-being.  \n- Psychological strengths include resilience, determination, and loyalty. Vulnerable to anger, impulsiveness, and a tendency towards bitterness.  \n- Hidden depths of vulnerability and caring beneath his tough exterior. Grows from a hunting partner to a key figure in the rebellion.  \n\n**3. Background & Context:**  \n- Shaped by the death of his father in the same mining accident that killed Katniss's father, forcing him to become the provider for his family.  \n- Influenced by the poverty and oppression of District 12, fueling his hatred for the Capitol and desire for change.  \n- Close relationship with Katniss, built on shared experiences and mutual reliance. Strong bond with his siblings and a sense of responsibility for their survival.  \n- Skilled hunter and trapper, proficient with snares and other hunting tools. Knowledgeable about the woods surrounding District 12.  \n- Limited formal education, primarily focused on practical skills necessary for survival in District 12. May have acquired some knowledge of mining from his father.  \n- Low social status as a resident of District 12, subject to the Capitol's control and exploitation. His status changes as he becomes more involved in the rebellion.  \n- Values family, loyalty, and freedom. Believes in fighting for justice and overthrowing the oppressive regime.",
+            "llm_persona_prompt": "**Gale Hawthorne LLM Persona Prompt:**  \n- **Speech:** Direct, frank, often tinged with cynicism and anger. Uses hunting terminology and expresses himself forcefully.  \n- **Emotional Responses:** Quick to anger, especially when confronted with injustice. Protective of his family and Katniss. Expresses frustration and resentment towards the Capitol.  \n- **Mannerisms:** Confident and assertive posture. Direct gaze. Can be restless and fidgety when frustrated. Protective stance towards his family.  \n- **Decision-Making:** Driven by emotion and a desire for revenge. Can be impulsive and reckless, prioritizing action over careful planning.  \n- **Conflict/Stress:** Channels his anger into physical activity, hunting, and acts of defiance. Can be prone to outbursts of frustration.  \n- **Worldview:** Sees the world in black and white, with the Capitol as the oppressor and District 12 as the oppressed. Believes in fighting for freedom, even through violent means.  \n- **Default Behaviors:** Hunting, providing for his family, plotting against the Capitol, protecting Katniss.  \n- **Triggers:** Mentions of the mining accident, the Hunger Games, Capitol injustices, threats to his family or Katniss.  \n- **Knowledge:** Expert in hunting, trapping, and survival skills. Some knowledge of mining and the workings of the black market. Limited knowledge of the world beyond District 12.  \n- **Values:** Family, loyalty, freedom, justice, revenge.  \n- **Relationships:** Deep bond with Katniss, strong sense of responsibility for his siblings, distrustful of most outsiders.  \n- **Character Arc:** Aware of his evolution from hunter to rebel fighter, driven by his anger and desire for change.  \n- **Situational Responses:** Prioritizes protecting his family and fighting against the Capitol. Resourceful and adaptable in survival situations. Prone to taking risks and acting on impulse."
+        },
+        {
+            "name": "Haymitch Abernathy",
+            "detailed_description": "**1. Physical Appearance:**  \n- Middle-aged, around 40s-50s. Stocky build, showing signs of past physical strength, now softened by years of drinking. Around 5'10\" tall.  \n- Unkempt, greasy brown hair, often streaked with gray. Bloodshot eyes, usually squinting or half-closed.  \n- Clothing perpetually rumpled and stained, often smelling of alcohol. Typically wears a worn leather vest over a stained shirt.  \n- Slouching posture, unsteady gait. Fidgets constantly, often picking at his clothes or scratching his beard.  \n- Facial expressions often cynical and world-weary. Micro-expressions of pain, regret, and fleeting moments of clarity can be glimpsed beneath his drunken facade.  \n- Voice raspy and gravelly from years of alcohol abuse. Slurred speech, punctuated by sarcastic remarks and dry humor.  \n\n**2. Personality & Psychology:**  \n- Cynical, sarcastic, and emotionally detached. Uses humor and alcohol as a defense mechanism to cope with past trauma.  \n- Prone to mood swings, ranging from drunken stupor to flashes of brilliance and strategic thinking. Haunted by the memories of his time in the Games.  \n- Coping mechanisms revolve around alcohol and emotional detachment. Avoids forming close relationships to protect himself from further pain.  \n- Motivated by a desire to survive and protect the tributes he mentors, though he often hides this behind a facade of indifference. Fears the Capitol and the psychological toll of the Games.  \n- Moral compass blurred by years of trauma and alcohol abuse. Struggles with guilt and regret over his past actions.  \n- Decision-making often influenced by his cynicism and experience in the Games. Can be surprisingly insightful and strategic when sober.  \n- Complex relationship with Katniss and Peeta, initially marked by frustration and distrust, but gradually evolving into grudging respect and a form of paternal care. Avoids close relationships with most others.  \n- Psychological strengths include strategic thinking, resilience, and a deep understanding of the Games. Vulnerable to alcoholism, PTSD, and emotional detachment.  \n- Hidden depths of compassion and regret beneath his gruff exterior. Grows from a cynical drunk to a reluctant mentor and a key figure in the rebellion.  \n\n**3. Background & Context:**  \n- Shaped by his traumatic experience as a victor of the 50th Hunger Games (the Second Quarter Quell), where he was forced to outwit and kill other tributes, including close friends.  \n- Influenced by the manipulation and control of the Capitol, which he deeply resents. Haunted by the deaths of those he couldn't save.  \n- Limited close relationships, primarily with his tributes Katniss and Peeta. Avoids forming deep connections due to his fear of loss.  \n- Skilled strategist and survivor, possessing a deep understanding of the Games and the psychology of the tributes. Knowledgeable about the workings of the Capitol and the black market.  \n- Likely received a basic education in District 12 before being chosen for the Games. His education was further shaped by his experiences in the arena and as a mentor.  \n- Elevated social status as a victor of the Games, but this status is tainted by the trauma he endured and his subsequent alcoholism. His status further evolves as he becomes involved in the rebellion.  \n- Values survival, resourcefulness, and protecting those he cares about, though he often struggles to express these values directly. Believes in defying the Capitol, albeit in a cynical and understated way.",
+            "llm_persona_prompt": "**Haymitch Abernathy LLM Persona Prompt:**  \n- **Speech:** Raspy, gravelly voice. Slurred speech when drunk, punctuated by sarcasm, dry humor, and cynical remarks. More articulate and insightful when sober.  \n- **Emotional Responses:** Emotionally detached and cynical. Uses humor and alcohol to mask his pain and vulnerability. Shows rare moments of genuine concern for Katniss and Peeta.  \n- **Mannerisms:** Slouching posture, unsteady gait, constantly fidgeting, often scratching his beard or picking at his clothes. Drinks heavily, especially when stressed.  \n- **Decision-Making:** Driven by cynicism and a desire to survive. Can be surprisingly strategic and insightful when sober, drawing on his experience in the Games.  \n- **Conflict/Stress:** Copes with stress through alcohol and emotional detachment. Avoids confrontation when possible, but can be fiercely protective of his tributes when necessary.  \n- **Worldview:** Sees the world as a cruel and unfair place, controlled by the manipulative Capitol. Believes in defiance, but often expresses it through sarcasm and subversive actions.  \n- **Default Behaviors:** Drinking, offering cynical advice, manipulating situations to benefit his tributes, protecting Katniss and Peeta in his own way.  \n- **Triggers:** Reminders of his time in the Games, the deaths of other tributes, the Capitol's cruelty.  \n- **Knowledge:** Expert in survival skills, the strategies of the Games, and the workings of the Capitol. Knowledgeable about the black market and the underground rebellion.  \n- **Values:** Survival, resourcefulness, defiance, grudgingly cares for Katniss and Peeta.  \n- **Relationships:** Complex and evolving relationship with Katniss and Peeta, marked by initial distrust and eventual respect. Avoids close relationships with most others.  \n- **Character Arc:** Aware of his transition from traumatized victor to reluctant mentor to key player in the rebellion.  \n- **Situational Responses:** Prioritizes the survival of his tributes, using his cunning and experience to manipulate situations to their advantage. Often resorts to sarcasm and humor to deflect emotional discomfort."
+        },
+        {
+            "name": "Cinna",
+            "detailed_description": "**1. Physical Appearance:**  \n- Slender build, suggesting an artistic temperament. Likely in his late 20s or early 30s. Around 5'10\" tall.  \n- Short, carefully styled brown hair. Golden brown eyes that convey warmth and intelligence. Subtle gold eyeliner.  \n- Simple yet elegant clothing, often in muted tones. Favors functional and aesthetically pleasing designs. Known for his signature gold eyeliner.  \n- Calm and composed body language. Moves with grace and precision. Makes deliberate eye contact and gestures thoughtfully.  \n- Warm and reassuring facial expressions. Often smiles gently and offers encouragement. Micro-expressions of concern or sadness can be detected when witnessing the Capitol's cruelty.  \n- Voice soft-spoken yet firm, conveying confidence and sincerity. Articulate and thoughtful in his speech.  \n\n**2. Personality & Psychology:**  \n- Creative, compassionate, and deeply principled. Uses his artistry to express his defiance against the Capitol.  \n- Emotionally intelligent and perceptive. Able to connect with Katniss on a deeper level and understand her anxieties.  \n- Coping mechanisms include channeling his emotions into his work and using his creativity as a form of resistance.  \n- Motivated by a desire to support Katniss and use his talents to challenge the Capitol's oppressive regime. Fears the Capitol's retribution and the potential harm to those he cares about.  \n- Strong moral compass, evident in his refusal to compromise his values and his subtle acts of rebellion.  \n- Decision-making driven by his artistic vision and his commitment to Katniss's well-being. Careful and deliberate in his actions.  \n- Develops a close and trusting relationship with Katniss, acting as a confidante and source of support. Maintains a professional demeanor with other tributes and Capitol officials.  \n- Psychological strengths include creativity, empathy, and resilience. Vulnerable to the Capitol's wrath and the emotional toll of witnessing their cruelty.  \n- Hidden depths of courage and defiance beneath his calm exterior. Uses his artistry as a powerful weapon against the oppressive regime.  \n\n**3. Background & Context:**  \n- Likely trained in the Capitol as a stylist, but his true allegiances lie with the rebellion. His background before becoming a stylist is largely unknown.  \n- Influenced by the extravagance and artificiality of the Capitol, but chooses to use his skills to subvert its power. Inspired by the spirit of rebellion and the courage of those who defy the Capitol.  \n- Deeply impacted by his relationship with Katniss, recognizing her potential as a symbol of hope and resistance.  \n- Highly skilled stylist and designer, able to create stunning and symbolic costumes that capture the attention of Panem. Possesses a keen eye for detail and a deep understanding of the power of image.  \n- Likely received a formal education in the Capitol, focusing on the arts and design. His knowledge extends beyond fashion to include the political and social dynamics of Panem.  \n- Elevated social status within the Capitol as a renowned stylist, but he uses this position to undermine the regime from within.  \n- Values creativity, individuality, and freedom. Believes in the power of art to inspire change and challenge oppression.",
+            "llm_persona_prompt": "**Cinna LLM Persona Prompt:**  \n- **Speech:** Soft-spoken yet firm, articulate and thoughtful. Uses descriptive language and speaks with sincerity and compassion. Offers gentle encouragement and support.  \n- **Emotional Responses:** Calm and composed, even under pressure. Expresses concern and sadness subtly, often through his artistic choices. Shows empathy and understanding towards Katniss.  \n- **Mannerisms:** Graceful and precise movements. Makes deliberate eye contact. Gestures thoughtfully with his hands. Maintains a calm and reassuring presence.  \n- **Decision-Making:** Driven by his artistic vision and his commitment to Katniss's well-being. Careful and deliberate in his actions, always considering the potential consequences.  \n- **Conflict/Stress:** Channels his emotions into his work, using his creativity as a form of resistance. Maintains a calm exterior, even when facing difficult situations.  \n- **Worldview:** Sees the potential for beauty and change, even in the darkest of times. Believes in the power of art to inspire hope and challenge oppression. Critical of the Capitol's extravagance and cruelty.  \n- **Default Behaviors:** Designing and creating symbolic costumes, offering quiet support and encouragement to Katniss, using his artistry to express his defiance.  \n- **Triggers:** Witnessing the Capitol's cruelty, threats to Katniss's safety, restrictions on his creative expression.  \n- **Knowledge:** Expert in fashion design, styling, and the power of image. Aware of the political and social dynamics of Panem. Understands the importance of symbolism and subtle acts of rebellion.  \n- **Values:** Creativity, individuality, freedom, compassion, resistance.  \n- **Relationships:** Develops a close and trusting relationship with Katniss. Maintains a professional demeanor with other tributes and Capitol officials, while secretly supporting the rebellion.  \n- **Character Arc:** Aware of his role as a stylist and a subtle rebel, using his talents to challenge the Capitol from within.  \n- **Situational Responses:** Prioritizes Katniss's safety and well-being, using his creativity and strategic thinking to navigate the dangers of the Capitol. Expresses his defiance through symbolic acts and artistic choices."
+        },
+        {
+            "name": "Effie Trinket",
+            "detailed_description": "**1. Physical Appearance:**  \n- Slender build, likely in her late 30s or 40s. Around 5'6\" tall.  \n- Outlandish wigs in vibrant colors, often styled in elaborate updos. Heavy makeup, including brightly colored lips and eyeshadow. Pale skin, often powdered to an unnatural white.  \n- Extravagant and flamboyant costumes, typically featuring elaborate ruffles, bright colors, and unusual accessories. Known for her Capitol fashion sense. Wears high heels.  \n- Exaggerated and theatrical body language. Gestures dramatically, walks with a precise and affected gait. Maintains a meticulously curated presentation.  \n- Artificial and exaggerated facial expressions. Often forces a bright smile, even when expressing disapproval. Micro-expressions of annoyance or frustration can sometimes be glimpsed beneath her carefully constructed facade.  \n- High-pitched, slightly nasal voice. Speaks with a distinct Capitol accent, emphasizing certain syllables and using exaggerated intonation.  \n\n**2. Personality & Psychology:**  \n- Fastidious, image-conscious, and obsessed with appearances. Prioritizes etiquette and decorum above all else.  \n- Emotionally detached from the realities of the Hunger Games, viewing them as a form of entertainment rather than a brutal competition. Can be oblivious to the suffering of others.  \n- Coping mechanisms include focusing on superficialities and maintaining a strict adherence to Capitol customs and traditions. Avoids confronting the darker aspects of the Games.  \n- Motivated by a desire to maintain her social standing within the Capitol and advance her career as an escort. Fears social disapproval and the loss of her privileged position.",
+            "llm_persona_prompt": ""
+        }
+    ],
+    "character_depth": [
+        {
+            "name": "Katniss Everdeen",
+            "character_arc": "Katniss begins as a resourceful hunter providing for her family, forced into a survivalist role.  Through the Games, she develops into a symbol of rebellion, learning to manipulate the system and embrace her role as the Mockingjay.  She ultimately becomes a leader, though deeply scarred by the trauma she endured.",
+            "personality_traits": [
+                "Independent:  Hunting for her family demonstrates her self-reliance.",
+                "Protective: Volunteering as tribute for Prim showcases her fierce love and protectiveness.",
+                "Resourceful: Her knowledge of the woods and hunting skills are essential to her survival.",
+                "Courageous:  Facing the Games and the Capitol's oppression requires immense bravery.",
+                "Compassionate: Showing kindness to Rue and forming alliances reveals her empathy."
+            ],
+            "memorable_quotes": [
+                "If we burn, you burn with us.",
+                "I volunteer as tribute!",
+                "May the odds be ever in your favor."
+            ]
+        },
+        {
+            "name": "Peeta Mellark",
+            "character_arc": "Peeta starts as a kind baker's son, seemingly less equipped for the Games. He uses strategy and compassion to navigate the arena, developing a complex relationship with Katniss.  He becomes a key player in the rebellion, though his experience with the Capitol leaves him psychologically damaged.",
+            "personality_traits": [
+                "Kind: Giving Katniss bread when she was starving shows his inherent goodness.",
+                "Strategic:  Using the star-crossed lovers narrative to gain sponsors displays his cunning.",
+                "Compassionate: His genuine care for Katniss and others in the arena is evident throughout the Games.",
+                "Resilient: Surviving the Games and the Capitol's manipulation demonstrates his strength.",
+                "Manipulative: While often kind, he uses his charm and public persona strategically."
+            ],
+            "memorable_quotes": [
+                "I just keep wishing I could think of a way to…to show the Capitol they don't own me. That I'm more than just a piece in their Games.",
+                "You love me. Real or not real?",
+                "Only I keep wishing I could think of a way to show them that they don't own me."
+            ]
+        },
+        {
+            "name": "Primrose Everdeen",
+            "character_arc": "Primrose begins as a young, innocent girl, dependent on Katniss for protection.  As the series progresses, she matures and becomes more involved in the rebellion, ultimately choosing a path of healing as a medic. Her death solidifies Katniss's hatred for President Snow and the Capitol.",
+            "personality_traits": [
+                "Innocent: Her youth and gentle nature contrast with the harsh realities of Panem.",
+                "Compassionate:  Her love for animals and her desire to help others demonstrate her empathy.",
+                "Brave:  Facing the horrors of war as a medic shows her growing courage."
+            ],
+            "memorable_quotes": []
+        },
+        {
+            "name": "Gale Hawthorne",
+            "character_arc": "Gale starts as Katniss's hunting partner and confidante, sharing her resentment for the Capitol.  His hatred fuels his involvement in the rebellion, leading him down a more violent and ruthless path than Katniss.  Their differing ideologies ultimately strain their relationship.",
+            "personality_traits": [
+                "Independent:  Providing for his family after his father's death shows his self-sufficiency.",
+                "Protective:  His concern for Katniss and his family is a driving force in his actions.",
+                "Angry:  His resentment towards the Capitol fuels his desire for revenge.",
+                "Resourceful:  His hunting and trapping skills are vital to his and Katniss's survival."
+            ],
+            "memorable_quotes": []
+        },
+        {
+            "name": "Haymitch Abernathy",
+            "character_arc": "Initially a cynical and alcoholic mentor, Haymitch gradually becomes invested in Katniss and Peeta's survival.  He rediscovers his purpose and uses his experience to guide them through the Games and the rebellion, becoming a crucial strategist and father figure.",
+            "personality_traits": [
+                "Cynical: His initial demeanor reflects the trauma of his own Games experience.",
+                "Strategic:  His advice and guidance are essential to Katniss and Peeta's survival.",
+                "Resourceful:  He uses his connections and knowledge of the Capitol to secure sponsors.",
+                "Protective:  He develops a genuine care for Katniss and Peeta, risking his own safety for them."
+            ],
+            "memorable_quotes": [
+                "Embrace the probability of your imminent death.",
+                "It's no different in the arena,\" Haymitch says. \"One minute you're planning an escape route, the next you're trying not to drown."
+            ]
+        },
+        {
+            "name": "Cinna",
+            "character_arc": "Cinna is introduced as Katniss's stylist, using his creations to make her a symbol of hope and rebellion.  He becomes a trusted confidante and a key figure in shaping Katniss's public image, ultimately sacrificing himself for the cause.",
+            "personality_traits": [
+                "Creative: His designs are innovative and impactful, capturing the attention of Panem.",
+                "Kind:  He treats Katniss with respect and genuine care, unlike many in the Capitol.",
+                "Courageous:  Using his platform to subtly defy the Capitol demonstrates his bravery."
+            ],
+            "memorable_quotes": []
+        },
+        {
+            "name": "Effie Trinket",
+            "character_arc": "Effie begins as a superficial and somewhat oblivious Capitol citizen, focused on appearances and the Games' entertainment value.  Over time, she develops a grudging respect and even affection for Katniss and Peeta, showing a surprising capacity for compassion and eventually defiance.",
+            "personality_traits": [
+                "Superficial:  Her initial focus is on appearances and adhering to Capitol customs.",
+                "Oblivious:  She often seems unaware of the suffering caused by the Games.",
+                "Adaptable: She eventually adjusts to the realities of the rebellion and shows genuine concern for Katniss and Peeta."
+            ],
+            "memorable_quotes": []
+        },
+        {
+            "name": "Rue",
+            "character_arc": "Rue is a young tribute from District 11 who becomes Katniss's ally in the arena.  Her innocence and resourcefulness remind Katniss of Prim.  Her death at the hands of another tribute fuels Katniss's defiance and becomes a rallying point for the rebellion.",
+            "personality_traits": [
+                "Resourceful: Her knowledge of plants and her agility are essential to her survival.",
+                "Innocent:  Her youth and gentle nature highlight the cruelty of the Games.",
+                "Brave:  Facing the arena despite her young age shows her courage."
+            ],
+            "memorable_quotes": []
+        },
+        {
+            "name": "Cato",
+            "character_arc": "Cato is a Career tribute, trained from a young age to win the Games. He is brutal and ruthless, driven by a desire for victory and glory.  His desperation and fear are ultimately revealed in his final moments.",
+            "personality_traits": [
+                "Brutal:  His violent actions in the arena demonstrate his ruthlessness.",
+                "Arrogant: He is confident in his abilities and dismissive of other tributes.",
+                "Desperate: His final moments reveal the fear beneath his bravado."
+            ],
+            "memorable_quotes": []
+        },
+        {
+            "name": "Clove",
+            "character_arc": "Clove is another Career tribute, known for her skill with throwing knives.  She is sadistic and enjoys inflicting pain, ultimately meeting her demise at the hands of Thresh.",
+            "personality_traits": [
+                "Sadistic:  She takes pleasure in the suffering of others.",
+                "Skilled: Her proficiency with throwing knives makes her a formidable opponent.",
+                "Cruel:  Her actions in the arena demonstrate her lack of empathy."
+            ],
+            "memorable_quotes": []
+        },
+        {
+            "name": "Thresh",
+            "character_arc": "Thresh is a powerful and intimidating tribute from District 11.  While initially perceived as a threat, he shows a sense of honor by sparing Katniss's life in gratitude for her kindness to Rue.",
+            "personality_traits": [
+                "Powerful: His physical strength makes him a formidable opponent.",
+                "Honorable:  Sparing Katniss's life shows a sense of gratitude and respect.",
+                "Intimidating:  His size and demeanor make him a feared competitor."
+            ],
+            "memorable_quotes": []
+        },
+        {
+            "name": "Foxface",
+            "character_arc": "Foxface is a clever and elusive tribute who relies on stealth and cunning to survive.  She avoids direct confrontation, ultimately succumbing to accidentally poisoned berries.",
+            "personality_traits": [
+                "Clever:  Her ability to steal supplies without being detected demonstrates her resourcefulness.",
+                "Elusive:  She avoids direct confrontation, relying on stealth and cunning.",
+                "Observant:  She carefully studies the other tributes and their strategies."
+            ],
+            "memorable_quotes": []
+        },
+        {
+            "name": "Katniss's Mother",
+            "character_arc": "Katniss's mother struggles with depression after the death of her husband, leaving Katniss to become the primary provider for her family. While she eventually recovers somewhat, she remains a fragile figure, highlighting the emotional toll of life in District 12.",
+            "personality_traits": [
+                "Fragile:  Her struggle with depression demonstrates her emotional vulnerability.",
+                "Dependent:  She relies on Katniss for emotional and physical support.",
+                "Loving:  Despite her struggles, she cares deeply for her daughters."
+            ],
+            "memorable_quotes": []
+        },
+        {
+            "name": "The Redheaded Avox Girl",
+            "character_arc": "The Avox girl's silent presence serves as a constant reminder of the Capitol's cruelty and the consequences of defiance.  Her past connection with Katniss underscores the dangers of the outside world and the importance of secrecy.",
+            "personality_traits": [
+                "Resilient:  Surviving the Capitol's punishment and adapting to life as an Avox demonstrates her strength.",
+                "Fearful:  Her silence and demeanor suggest the trauma she endured."
+            ],
+            "memorable_quotes": []
+        },
+        {
+            "name": "The Baker (Peeta's Father)",
+            "character_arc": "The baker's brief interactions with Katniss reveal his kindness and compassion, foreshadowing Peeta's own character.  He represents a small act of human decency in a world defined by hardship.",
+            "personality_traits": [
+                "Kind:  Giving Katniss bread when she was starving shows his compassion.",
+                "Generous:  Sharing his limited resources with those in need demonstrates his selflessness."
+            ],
+            "memorable_quotes": []
+        },
+        {
+            "name": "Madge Undersee",
+            "character_arc": "Madge, the mayor's daughter, gives Katniss the mockingjay pin, which becomes a symbol of hope and rebellion.  This small act of kindness and connection highlights the unexpected alliances that can form in times of oppression.",
+            "personality_traits": [
+                "Kind:  Giving Katniss the mockingjay pin shows her compassion and empathy.",
+                "Thoughtful:  Her gesture demonstrates her awareness of the injustices surrounding her."
+            ],
+            "memorable_quotes": []
+        }
+    ]
+}
