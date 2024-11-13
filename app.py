@@ -5,6 +5,8 @@ from flask_login import LoginManager
 from flask_migrate import Migrate
 from sqlalchemy.orm import DeclarativeBase
 from dotenv import load_dotenv
+from flask_cors import CORS  # Add this import
+
 
 load_dotenv()
 os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = os.getenv('GOOGLE_API_KEY')

@@ -2,17 +2,17 @@ from flask import render_template, redirect, url_for, flash, request, jsonify, s
 from flask_login import login_user, logout_user, login_required, current_user
 from app import app, db
 from models import User, Book, Character, Conversation, Library, Favorite
-# from utils import (
-#      process_pdf_content,
-#     extract_text_from_epub,
-#     extract_characters,
-#     generate_character_response,
-#     analyze_book,
-#     create_character_prompt,
-#     initialize_chat_model,
-#     initialize_chat,
-#     get_chatbot_response
-# )
+from utils import (
+     process_pdf_content,
+    extract_text_from_epub,
+    extract_characters,
+    generate_character_response,
+    analyze_book,
+    create_character_prompt,
+    initialize_chat_model,
+    initialize_chat,
+    get_chatbot_response
+)
 # from utils.recommendations import get_recommendations
 # from utils.image_helpers import generate_responsive_images, get_image_dimensions
 from werkzeug.utils import secure_filename

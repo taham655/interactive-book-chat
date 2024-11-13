@@ -13,6 +13,8 @@ from .models import (
     CharacterDepthList,
     CharacterAnalysis
 )
+from bs4 import BeautifulSoup
+from PyPDF2 import PdfReader
 
 def process_pdf_content(file) -> str:
     """Process PDF file and extract text content"""
@@ -26,6 +28,7 @@ def extract_text_from_epub(epub_path: str) -> str:
     """Extract text content from EPUB file."""
     book = epub.read_epub(epub_path)
     text = ''
+    chapters = []
 
     for item in book.get_items():
         if item.get_type() == ebooklib.ITEM_DOCUMENT:

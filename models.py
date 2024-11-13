@@ -46,16 +46,13 @@ class Character(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
     description = db.Column(db.Text)
-    personality_traits = db.Column(db.JSON)  # Store as JSON array
-    emotional_profile = db.Column(db.JSON)   # Store as JSON object
-    relationships = db.Column(db.JSON)       # Store as JSON array
+    personality_traits = db.Column(db.JSON)
+    emotional_profile = db.Column(db.JSON)
+    relationships = db.Column(db.JSON)
     personality_summary = db.Column(db.Text)
-    role = db.Column(db.String(100))        # Add this field
+    role = db.Column(db.String(100))  # Make sure this line is present
     book_id = db.Column(db.Integer, db.ForeignKey('book.id'), nullable=False)
     conversations = db.relationship('Conversation', backref='character', lazy=True)
-
-    def __repr__(self):
-        return f'<Character {self.name}>'
 
 class Conversation(db.Model):
     id = db.Column(db.Integer, primary_key=True)

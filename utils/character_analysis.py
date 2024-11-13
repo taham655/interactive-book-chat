@@ -35,49 +35,49 @@ class EnhancedBookAnalyzer:
         self.depth_parser = PydanticOutputParser(pydantic_object=CharacterDepthList)
         self.using_fallback = False
 
-#         # Create prompts
-#         self.first_pass_prompt = PromptTemplate(
-#             template=first_pass_template,
-#             input_variables=["book_text"],
-#             partial_variables={"format_instructions": self.basic_parser.get_format_instructions()}
-#         )
-#         self.second_pass_prompt = PromptTemplate(
-#             template=second_pass_template,
-#             input_variables=["character_list"],
-#             partial_variables={"format_instructions": self.description_parser.get_format_instructions()}
-#         )
-#         self.third_pass_prompt = PromptTemplate(
-#             template=third_pass_template,
-#             input_variables=["character_list"],
-#             partial_variables={"format_instructions": self.depth_parser.get_format_instructions()}
-#         )
+        # Create prompts
+        self.first_pass_prompt = PromptTemplate(
+            template=first_pass_template,
+            input_variables=["book_text"],
+            partial_variables={"format_instructions": self.basic_parser.get_format_instructions()}
+        )
+        self.second_pass_prompt = PromptTemplate(
+            template=second_pass_template,
+            input_variables=["character_list"],
+            partial_variables={"format_instructions": self.description_parser.get_format_instructions()}
+        )
+        self.third_pass_prompt = PromptTemplate(
+            template=third_pass_template,
+            input_variables=["character_list"],
+            partial_variables={"format_instructions": self.depth_parser.get_format_instructions()}
+        )
 
-#     async def analyze_full_text(self, book_text: str) -> Dict:
-#         """Primary analysis method that handles both direct and chunked processing."""
-#         try:
-#             # First Pass: Character Identification
-#             basic_characters = await self._first_pass_analysis(book_text)
+    async def analyze_full_text(self, book_text: str) -> Dict:
+        """Primary analysis method that handles both direct and chunked processing."""
+        try:
+            # First Pass: Character Identification
+            basic_characters = await self._first_pass_analysis(book_text)
 
-#             # Convert to character list for subsequent passes
-#             character_list = [
-#                 {"name": char.name, "role": char.role}
-#                 for char in basic_characters.characters
-#             ]
+            # Convert to character list for subsequent passes
+            character_list = [
+                {"name": char.name, "role": char.role}
+                for char in basic_characters.characters
+            ]
 
-#             # Use the appropriate model for subsequent passes
-#             model = self.fallback_model if self.using_fallback else self.primary_model
+            # Use the appropriate model for subsequent passes
+            model = self.fallback_model if self.using_fallback else self.primary_model
 
-#             # Run second and third pass analyses concurrently
-#             character_descriptions, character_depth = await asyncio.gather(
-#                 self._second_pass_analysis(character_list, model),
-#                 self._third_pass_analysis(character_list, model)
-#             )
+            # Run second and third pass analyses concurrently
+            character_descriptions, character_depth = await asyncio.gather(
+                self._second_pass_analysis(character_list, model),
+                self._third_pass_analysis(character_list, model)
+            )
 
-#             return self._format_result(
-#                 basic_characters,
-#                 character_descriptions,
-#                 character_depth
-#             )
+            return self._format_result(
+                basic_characters,
+                character_descriptions,
+                character_depth
+            )
 
         except Exception as e:
             print(f"Error during character analysis: {str(e)}")
@@ -110,14 +110,14 @@ class EnhancedBookAnalyzer:
             self.using_fallback = True
             return await self._chunked_first_pass(book_text)
 
-#     async def _chunked_first_pass(self, book_text: str) -> BasicCharacterList:
-#         """Process first pass in chunks using fallback model."""
-#         words = book_text.split()
-#         chunk_size = 50000
-#         chunks = [
-#             ' '.join(words[i:i + chunk_size])
-#             for i in range(0, len(words), chunk_size)
-#         ]
+    async def _chunked_first_pass(self, book_text: str) -> BasicCharacterList:
+        """Process first pass in chunks using fallback model."""
+        words = book_text.split()
+        chunk_size = 50000
+        chunks = [
+            ' '.join(words[i:i + chunk_size])
+            for i in range(0, len(words), chunk_size)
+        ]
 
         total_chunks = len(chunks)
         all_characters = {}  # Using dict for deduplication
@@ -136,14 +136,14 @@ class EnhancedBookAnalyzer:
                 )
                 chunk_characters = self.basic_parser.parse(formatted_response)
 
-#                 # Merge characters from this chunk
-#                 for char in chunk_characters.characters:
-#                     if char.name in all_characters:
-#                         # Update existing character info
-#                         self._merge_character_basic_info(all_characters[char.name], char)
-#                     else:
-#                         # Add new character
-#                         all_characters[char.name] = char
+                # Merge characters from this chunk
+                for char in chunk_characters.characters:
+                    if char.name in all_characters:
+                        # Update existing character info
+                        self._merge_character_basic_info(all_characters[char.name], char)
+                    else:
+                        # Add new character
+                        all_characters[char.name] = char
 
                 await asyncio.sleep(30)  # Small delay to prevent rate limiting
 
@@ -175,34 +175,34 @@ class EnhancedBookAnalyzer:
         character_depth = self.depth_parser.parse(formatted_response)
         return character_depth
 
-#     def _merge_character_basic_info(self, existing: BasicCharacter, new: BasicCharacter) -> None:
-#         """Merge basic character information from chunks."""
-#         # Update importance level to highest found
-#         existing.importance_level = max(existing.importance_level, new.importance_level)
+    def _merge_character_basic_info(self, existing: BasicCharacter, new: BasicCharacter) -> None:
+        """Merge basic character information from chunks."""
+        # Update importance level to highest found
+        existing.importance_level = max(existing.importance_level, new.importance_level)
 
-#         # Keep longer plot importance description
-#         if len(new.plot_importance) > len(existing.plot_importance):
-#             existing.plot_importance = new.plot_importance
+        # Keep longer plot importance description
+        if len(new.plot_importance) > len(existing.plot_importance):
+            existing.plot_importance = new.plot_importance
 
-#         # Merge relationships without duplicates
-#         existing.key_relationships = list(set(existing.key_relationships + new.key_relationships))
+        # Merge relationships without duplicates
+        existing.key_relationships = list(set(existing.key_relationships + new.key_relationships))
 
-#     def _format_result(self, basic_chars, char_descriptions, char_depth) -> Dict:
-#         """Format the final result."""
-#         return {
-#             "basic_info": [
-#                 char.model_dump()
-#                 for char in basic_chars.characters
-#             ],
-#             "descriptions": [
-#                 char.model_dump()
-#                 for char in char_descriptions.characters
-#             ],
-#             "character_depth": [
-#                 char.model_dump()
-#                 for char in char_depth.characters
-#             ]
-#         }
+    def _format_result(self, basic_chars, char_descriptions, char_depth) -> Dict:
+        """Format the final result."""
+        return {
+            "basic_info": [
+                char.model_dump()
+                for char in basic_chars.characters
+            ],
+            "descriptions": [
+                char.model_dump()
+                for char in char_descriptions.characters
+            ],
+            "character_depth": [
+                char.model_dump()
+                for char in char_depth.characters
+            ]
+        }
 
 async def analyze_book(book_text: str, primary_model: str = "gemini-1.5-pro", 
                       fallback_model: str = "gpt-4o-mini") -> Dict:
