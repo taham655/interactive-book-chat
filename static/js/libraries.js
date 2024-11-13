@@ -63,4 +63,31 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     });
+
+    // Add event listeners for delete book buttons
+    document.querySelectorAll('.delete-book').forEach(button => {
+        button.addEventListener('click', async function() {
+            const bookId = this.dataset.bookId;
+            const bookTitle = this.dataset.bookTitle;
+            
+            if (confirm(`Are you sure you want to delete "${bookTitle}"? This action cannot be undone.`)) {
+                try {
+                    const response = await fetch(`/book/${bookId}/delete`, {
+                        method: 'POST'
+                    });
+                    
+                    if (response.ok) {
+                        // Remove the book card from the UI
+                        const bookCard = this.closest('.card');
+                        bookCard.remove();
+                    } else {
+                        const data = await response.json();
+                        alert(data.error || 'Failed to delete book');
+                    }
+                } catch (error) {
+                    alert('Failed to delete book: ' + error.message);
+                }
+            }
+        });
+    });
 });

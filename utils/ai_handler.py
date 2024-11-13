@@ -1,13 +1,17 @@
-# import os
-# from openai import OpenAI
-# from typing import Any, List, Dict
-# import json
-# from langchain_google_genai import ChatGoogleGenerativeAI
-# from langchain_openai import ChatOpenAI
-# from .character_analysis import create_character_prompt, get_character_details, BasicCharacterList, CharacterDescriptionList, CharacterDepthList
-
-# # Initialize OpenAI client
-# openai_client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
+import os
+from openai import OpenAI
+from typing import Any, List, Dict
+import json
+from langchain_google_genai import ChatGoogleGenerativeAI
+from langchain_openai import ChatOpenAI
+import streamlit as st
+from .models import (
+    BasicCharacterList, 
+    CharacterDescriptionList, 
+    CharacterDepthList
+)
+import asyncio
+from .prompts import create_character_prompt  # Changed import
 
 # def initialize_chat_model(model_name: str = "gemini-1.5-pro") -> Any:
 #     """Initialize the chat model with the specified configuration"""
@@ -16,38 +20,41 @@
 #         temperature=0.7
 #     )
 
-# def format_with_gpt(content: str, pass_number: int, model: Any) -> str:
-#     """Use OpenAI's parse method to ensure output matches our Pydantic models"""
-#     client = OpenAI()
+async def format_with_gpt(content: str, pass_number: int) -> str:
+    """Use OpenAI's parse method to ensure output matches our Pydantic models"""
+    client = OpenAI()
 
-#     model_map = {
-#         1: BasicCharacterList,
-#         2: CharacterDescriptionList,
-#         3: CharacterDepthList
-#     }
+    model_map = {
+        1: BasicCharacterList,
+        2: CharacterDescriptionList,
+        3: CharacterDepthList
+    }
 
-#     system_messages = {
-#         1: "You are a character analysis expert. Format the content into the required structure.",
-#         2: "You are a character analysis expert. Format the content into the required structure.",
-#         3: "You are a character analysis expert. Format the content into the required structure. If no memorable quotes are available, use an empty array []."
-#     }
+    try:
+        system_messages = {
+            1: "You are a character analysis expert. Format the content into the required structure.",
+            2: "You are a character analysis expert. Format the content into the required structure.",
+            3: "You are a character analysis expert. Format the content into the required structure. If no memorable quotes are available, use an empty array []."
+        }
 
-#     try:
-#         completion = client.beta.chat.completions.parse(
-#             model="gpt-4-turbo-preview",
-#             messages=[
-#                 {"role": "system", "content": system_messages[pass_number]},
-#                 {"role": "user", "content": f"Format this content into the required structure:\n\n{content}"}
-#             ],
-#             response_format=model_map[pass_number],
-#         )
+        # Use asyncio.to_thread to make the synchronous parse call async
+        completion = await asyncio.to_thread(
+            client.beta.chat.completions.parse,
+            model="gpt-4o-mini",
+            messages=[
+                {"role": "system", "content": system_messages[pass_number]},
+                {"role": "user", "content": f"Format this content into the required structure:\n\n{content}"}
+            ],
+            response_format=model_map[pass_number],
+        )
 
-#         return json.dumps(completion.choices[0].message.parsed.model_dump(), indent=2)
+        # Convert the parsed response to JSON string
+        return json.dumps(completion.choices[0].message.parsed.model_dump(), indent=2)
 
-#     except Exception as e:
-#         print(f"Error formatting pass {pass_number}: {str(e)}")
-#         print("Original content:", content)
-#         raise
+    except Exception as e:
+        print(f"Error formatting pass {pass_number}: {str(e)}")
+        print("Original content:", content)
+        raise
 
 # def generate_character_response(
 #     character_prompt: str,
