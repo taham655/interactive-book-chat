@@ -50,7 +50,9 @@ class Character(db.Model):
     emotional_profile = db.Column(db.JSON)
     relationships = db.Column(db.JSON)
     personality_summary = db.Column(db.Text)
-    role = db.Column(db.String(100))  # Make sure this line is present
+    role = db.Column(db.String(100))
+    importance_level = db.Column(db.Integer)  # Add this line
+    llm_persona_prompt = db.Column(db.Text)   # Add this line
     book_id = db.Column(db.Integer, db.ForeignKey('book.id'), nullable=False)
     conversations = db.relationship('Conversation', backref='character', lazy=True)
 
@@ -74,3 +76,15 @@ library_books = db.Table('library_books',
     db.Column('library_id', db.Integer, db.ForeignKey('library.id'), primary_key=True),
     db.Column('book_id', db.Integer, db.ForeignKey('book.id'), primary_key=True)
 )
+
+
+class BookAnalysis(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    book_name = db.Column(db.String(200), nullable=False)
+    author_name = db.Column(db.String(200))
+    character_analysis = db.Column(db.JSON)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    
+    __table_args__ = (
+        db.UniqueConstraint('book_name', 'author_name', name='unique_book_author'),
+    )

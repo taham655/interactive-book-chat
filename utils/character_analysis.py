@@ -5,7 +5,7 @@ from langchain_core.output_parsers import PydanticOutputParser
 import json
 import asyncio
 import aiofiles
-from .models import (
+from .character_models import (
     BasicCharacter,
     BasicCharacterList, 
     CharacterDescriptionList, 

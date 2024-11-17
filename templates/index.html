@@ -36,65 +36,12 @@
                 </label>
             </div>
 
-            <!-- Recommended Books Section -->
-            {% if recommended_books %}
-            <div class="section-header mb-4">
-                <h2 class="h4"><i class="bi bi-stars me-2"></i>Recommended Books</h2>
-            </div>
-            <div class="row g-4 mb-5">
-                {% for book in recommended_books %}
-                    <div class="col-md-6">
-                        <div class="book-card">
-                            <div class="book-content">
-                                <h3 class="book-title">{{ book.title }}</h3>
-                                <div class="book-meta">
-                                    <span><i class="bi bi-people me-1"></i>{{ book.characters.count() }} characters</span>
-                                </div>
-                                <div class="book-actions">
-                                    <div class="dropdown">
-                                        <button class="btn btn-light dropdown-toggle" type="button" data-bs-toggle="dropdown">
-                                            <i class="bi bi-collection me-1"></i> Add to Library
-                                        </button>
-                                        <ul class="dropdown-menu">
-                                            {% for library in current_user.libraries %}
-                                                <li>
-                                                    <button class="dropdown-item add-to-library"
-                                                            data-library-id="{{ library.id }}"
-                                                            data-book-id="{{ book.id }}">
-                                                        {{ library.name }}
-                                                    </button>
-                                                </li>
-                                            {% else %}
-                                                <li><span class="dropdown-item disabled">No libraries</span></li>
-                                            {% endfor %}
-                                        </ul>
-                                    </div>
-                                    {% set is_book_favorite = current_user.favorites.filter_by(book_id=book.id).first() is not none %}
-                                    <button class="btn btn-icon {% if is_book_favorite %}btn-danger{% else %}btn-outline-danger{% endif %} toggle-favorite"
-                                            data-type="book"
-                                            data-id="{{ book.id }}">
-                                        <i class="bi bi-heart{% if not is_book_favorite %}-fill{% endif %}"></i>
-                                    </button>
-                                    
-                                    <button class="btn btn-outline-danger delete-book" 
-                                            data-book-id="{{ book.id }}"
-                                            data-book-title="{{ book.title }}">
-                                        <i class="bi bi-trash me-1"></i> Delete
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                {% endfor %}
-            </div>
-            {% endif %}
-
             <!-- Your Books Section -->
             <div class="section-header mb-4">
                 <h2 class="h4"><i class="bi bi-books me-2"></i>Your Books</h2>
             </div>
             <div class="books-grid">
-                {% for book in current_user.books %}
+                {% for book in books %}
                     <div class="book-card">
                         <div class="book-header">
                             <h3 class="book-title">{{ book.title }}</h3>
@@ -125,6 +72,11 @@
                                         data-type="book"
                                         data-id="{{ book.id }}">
                                     <i class="bi bi-heart{% if not is_book_favorite %}-fill{% endif %}"></i>
+                                </button>
+                                <button class="btn btn-outline-danger delete-book" 
+                                        data-book-id="{{ book.id }}"
+                                        data-book-title="{{ book.title }}">
+                                    <i class="bi bi-trash me-1"></i> Delete
                                 </button>
                             </div>
                         </div>
@@ -161,6 +113,49 @@
 {% if current_user.is_authenticated %}
     <script src="{{ url_for('static', filename='js/upload.js') }}"></script>
     <script src="{{ url_for('static', filename='js/libraries.js') }}"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Add click handlers for delete buttons
+        document.querySelectorAll('.delete-book').forEach(button => {
+            button.addEventListener('click', function() {
+                const bookId = this.getAttribute('data-book-id');
+                const bookTitle = this.getAttribute('data-book-title');
+                if (confirm(`Are you sure you want to delete "${bookTitle}"? This action cannot be undone.`)) {
+                    deleteBook(bookId);
+                }
+            });
+        });
+    });
+
+    function deleteBook(bookId) {
+        fetch(`/book/${bookId}/delete`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Remove the book card from the UI
+                const bookCard = document.querySelector(`[data-book-id="${bookId}"]`).closest('.book-card');
+                bookCard.remove();
+                
+                // Show success message
+                alert('Book deleted successfully');
+                
+                // Refresh the page to update counts
+                window.location.reload();
+            } else {
+                alert('Failed to delete book: ' + (data.error || 'Unknown error'));
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Failed to delete book. Please try again.');
+        });
+    }
+    </script>
 {% endif %}
 
 <style>
@@ -263,6 +258,20 @@
 .section-header {
     border-bottom: 2px solid #eee;
     padding-bottom: 0.5rem;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 1rem;
+}
+
+.delete-book {
+    padding: 0.25rem 0.5rem;
+    transition: color 0.2s;
+}
+
+.delete-book:hover {
+    color: #dc3545 !important;
 }
 </style>
 {% endblock %}

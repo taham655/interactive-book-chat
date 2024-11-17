@@ -1,4 +1,4 @@
-from .models import (
+from .character_models import (
     BasicCharacter,
     BasicCharacterList,
     CharacterDescription,
@@ -18,15 +18,12 @@ from .ai_handler import (
     format_with_gpt
 )
 from .character_analysis import analyze_book
-from .file_processing import (  # Add this import
+from .file_processing import ( 
     process_pdf_content,
     extract_text_from_epub,
-    extract_characters
-)
-from .recommendations import get_recommendations  # Add this import
-from .image_helpers import (  # Add this import
-    generate_responsive_images,
-    get_image_dimensions
+    extract_characters,
+    ingest_book ,
+    analyze_book_metadata_sync
 )
 
 __all__ = [
@@ -44,7 +41,8 @@ __all__ = [
     'process_pdf_content',
     'extract_text_from_epub',
     'extract_characters',
-    
+    'ingest_book',  
+    'analyze_book_metadata_sync',
     # AI handling
     'create_character_prompt',
     'initialize_chat_model',
@@ -54,11 +52,4 @@ __all__ = [
     'get_character_details',
     'format_with_gpt',
     'analyze_book',
-    
-    # Image handling
-    'generate_responsive_images',
-    'get_image_dimensions',
-    
-    # Recommendations
-    'get_recommendations'
 ]

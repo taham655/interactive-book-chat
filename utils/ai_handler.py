@@ -5,7 +5,7 @@ import json
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_openai import ChatOpenAI
 import streamlit as st
-from .models import (
+from .character_models import (
     BasicCharacterList, 
     CharacterDescriptionList, 
     CharacterDepthList

@@ -1,0 +1,269 @@
+{% extends "base.html" %}
+
+{% block title %}Welcome to Fabled{% endblock %}
+
+{% block content %}
+<div class="landing-page">
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-content">
+      <h1 class="hero-title">Welcome to Fabled</h1>
+      <p class="hero-text">Dive into the world of your favorite books by chatting with their most intriguing characters.</p>
+      
+      {% if not current_user.is_authenticated %}
+        <div class="hero-buttons">
+          <a href="{{ url_for('register') }}" class="btn btn-primary">
+            <i class="bi bi-person-plus"></i> Create an Account
+          </a>
+          <a href="{{ url_for('login') }}" class="btn btn-outline">
+            <i class="bi bi-box-arrow-in-right"></i> Login
+          </a>
+        </div>
+      {% else %}
+        <div class="hero-buttons">
+          <a href="{{ url_for('index') }}" class="btn btn-primary">
+            <i class="bi bi-book-half"></i> Go to Your Library
+          </a>
+        </div>
+      {% endif %}
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section class="features">
+    <h2 class="section-title">Why Choose Fabled?</h2>
+    <div class="features-grid">
+      <div class="feature-card">
+        <i class="bi bi-chat-dots"></i>
+        <h3>Interactive Chats</h3>
+        <p>Engage in real-time conversations with your favorite characters.</p>
+      </div>
+      <div class="feature-card">
+        <i class="bi bi-bookmark-star"></i>
+        <h3>Personalized Experience</h3>
+        <p>Tailored to your preferences for a unique journey.</p>
+      </div>
+      <div class="feature-card">
+        <i class="bi bi-lightning-charge"></i>
+        <h3>Seamless Technology</h3>
+        <p>Enjoy a smooth, cutting-edge interface for all devices.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonials Section -->
+  <section class="testimonials">
+    <h2 class="section-title">What Our Users Say</h2>
+    <div class="testimonials-grid">
+      <div class="testimonial-card">
+        <p>"Fabled has transformed the way I read books. Chatting with characters brings stories to life!"</p>
+        <cite>- Jane Doe</cite>
+      </div>
+      <div class="testimonial-card">
+        <p>"An amazing platform for book lovers! The interactive chats are both fun and insightful."</p>
+        <cite>- John Smith</cite>
+      </div>
+    </div>
+  </section>
+</div>
+
+<style>
+  .landing-page {
+    min-height: 100vh;
+    background-color: #f8f9fa;
+  }
+
+  .hero {
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    color: white;
+    padding: 6rem 1rem;
+    text-align: center;
+  }
+
+  .hero-content {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .hero-title {
+    font-size: 3.5rem;
+    font-weight: bold;
+    margin-bottom: 1.5rem;
+    animation: fadeInDown 1s ease-out;
+  }
+
+  .hero-text {
+    font-size: 1.5rem;
+    margin-bottom: 2rem;
+    opacity: 0.9;
+    animation: fadeInUp 1s ease-out 0.3s forwards;
+    opacity: 0;
+  }
+
+  .hero-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    animation: fadeInUp 1s ease-out 0.6s forwards;
+    opacity: 0;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    border-radius: 9999px;
+    font-weight: bold;
+    transition: all 0.3s ease;
+  }
+
+  .btn i {
+    font-size: 1.25rem;
+  }
+
+  .btn-primary {
+    background-color: white;
+    color: #6366f1;
+  }
+
+  .btn-primary:hover {
+    background-color: #f8f9fa;
+    transform: translateY(-2px);
+  }
+
+  .btn-outline {
+    border: 2px solid white;
+    color: white;
+  }
+
+  .btn-outline:hover {
+    background-color: white;
+    color: #6366f1;
+    transform: translateY(-2px);
+  }
+
+  .features, .testimonials {
+    padding: 4rem 1rem;
+  }
+
+  .section-title {
+    text-align: center;
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin-bottom: 3rem;
+    color: #1f2937;
+  }
+
+  .features-grid, .testimonials-grid {
+    display: grid;
+    gap: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1rem;
+  }
+
+  .features-grid {
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  }
+
+  .feature-card {
+    background: white;
+    padding: 2rem;
+    border-radius: 1rem;
+    text-align: center;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+  }
+
+  .feature-card:hover {
+    transform: translateY(-5px);
+  }
+
+  .feature-card i {
+    font-size: 2.5rem;
+    color: #6366f1;
+    margin-bottom: 1rem;
+  }
+
+  .feature-card h3 {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+    color: #1f2937;
+  }
+
+  .feature-card p {
+    color: #6b7280;
+  }
+
+  .testimonials {
+    background-color: white;
+  }
+
+  .testimonials-grid {
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  }
+
+  .testimonial-card {
+    background: #f8f9fa;
+    padding: 2rem;
+    border-radius: 1rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  }
+
+  .testimonial-card p {
+    font-size: 1.125rem;
+    color: #4b5563;
+    margin-bottom: 1rem;
+    font-style: italic;
+  }
+
+  .testimonial-card cite {
+    color: #6366f1;
+    font-weight: bold;
+  }
+
+  @keyframes fadeInDown {
+    from {
+      opacity: 0;
+      transform: translateY(-20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @media (max-width: 768px) {
+    .hero-title {
+      font-size: 2.5rem;
+    }
+
+    .hero-text {
+      font-size: 1.25rem;
+    }
+
+    .hero-buttons {
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    .btn {
+      width: 100%;
+      justify-content: center;
+    }
+  }
+</style>
+{% endblock %}
